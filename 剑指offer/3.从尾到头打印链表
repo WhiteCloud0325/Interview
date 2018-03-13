@@ -1,0 +1,43 @@
+题目描述
+输入一个链表，从尾到头打印链表每个节点的值。
+
+/**
+*  struct ListNode {
+*        int val;
+*        struct ListNode *next;
+*        ListNode(int x) :
+*              val(x), next(NULL) {
+*        }
+*  };
+*/
+
+Answer1:虽然简单但使用insert效率很低
+class Solution {
+public:
+    vector<int> printListFromTailToHead(ListNode* head) {
+        ListNode *cur=head;
+        vector<int> res;
+        while(cur){
+            res.insert(res.begin(),cur->val);
+            cur = cur->next;
+        }
+        return res;
+    }
+};
+
+Answer2：先push_back 然后使用<algorithm>的reverse函数反转 void reverse (BidirectionalIterator first, BidirectionalIterator last);
+
+class Solution {
+public:
+    vector<int> printListFromTailToHead(ListNode* head) {
+        ListNode *cur=head;
+        vector<int> res;
+        while(cur){
+            res.push_back(cur->val);
+            cur=cur->next;
+        }
+        reverse(res.begin(),res.end());
+        return res;
+    }
+};
+
