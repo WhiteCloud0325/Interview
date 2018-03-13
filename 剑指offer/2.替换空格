@@ -1,0 +1,31 @@
+题目描述
+请实现一个函数，将一个字符串中的空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。
+
+Answer: 首先统计空格的数目，因为一个空格后面的字符要多移动2位，所以一个字符的移动是此字符前的空格数num再乘以2，当遇到空格时，num--，添加的'2''0',多添加1位和2位
+		*(cur+num*2+2)='0';
+        *(cur+num*2+1)='2';
+        *(cur+num*2)='%';
+		当num==0 时空格移动完了，之前的字符不用再移动
+class Solution {
+public:
+	void replaceSpace(char *str,int length) {
+        if(!str) return;
+        int num=0;    //统计空格数目
+        char *cur=str;
+        while(*cur){
+            if(*cur == ' ') ++num;
+            cur++;
+        }
+        while(num!=0){
+            if(*cur == ' '){
+                --num;
+                *(cur+num*2+2)='0';
+                *(cur+num*2+1)='2';
+                *(cur+num*2)='%';
+            }
+            else
+                *(cur+num*2)=*cur;
+            cur--;
+        }
+	}
+};
