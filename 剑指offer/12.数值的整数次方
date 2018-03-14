@@ -1,0 +1,22 @@
+题目描述
+给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+
+
+Answer:
+分析：exponent==0 return 1；
+	  exponent<0时，return Power(1/base,-exponent)按正数来算
+	  exponent>0时, 递推公式 base^exponent = base^(exponent/2) * base^(exponent/2) *base, exponent为奇数
+											  base^(exponent/2) * base^(exponent/2) ，exponent为偶数	
+class Solution {
+public:
+    double Power(double base, int exponent) {
+        if(0 == exponent) return 1;
+        //考虑exponent是否是负数
+        if(exponent <0 ) return Power(1/base,-exponent);
+        if(exponent == 1) return base;
+        double res=Power(base,exponent/2);
+        res=res*res;
+        return (exponent % 2 )?res*base:res;
+         
+    }
+};
