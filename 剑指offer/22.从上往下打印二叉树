@@ -1,0 +1,23 @@
+题目描述
+从上往下打印出二叉树的每个节点，同层节点从左至右打印。
+
+
+
+Answer:广度优先搜索
+vector<int> PrintFromTopToBottom(TreeNode* root) {
+	vector<int> res;
+	if(!root) return res;
+	queue<TreeNode*> fifo_queue;
+	fifo_queue.push(root);
+	while(!fifo_queue.empty()){
+		int n=fifo_queue.size();
+		while(n--){
+			TreeNode *node=fifo_queue.front();
+			fifo_queue.pop();
+			res.push_back(node->val);
+			if(node->left) fifo_queue.push(node->left);
+			if(node->right) fifo_queue.push(node->right);
+		}
+	}
+	return res;
+}
