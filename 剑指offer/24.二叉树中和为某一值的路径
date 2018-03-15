@@ -1,0 +1,39 @@
+题目描述
+输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
+
+Answer:DFS 递归，当node->left==NULL&& node->right == NULl 即到叶节点时返回
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<vector<int> > FindPath(TreeNode* root,int expectNumber) {
+        res=vector<vector<int>>();
+        if(root == NULL) return res;
+        findPath(root,expectNumber,vector<int>());
+        return res;
+        
+    }
+    void findPath(TreeNode *node,int expectNumber,vector<int> path){
+        if(node->left==NULL && node->right == NULL){
+            if(node->val == expectNumber){
+                path.push_back(node->val);
+                res.push_back(path);
+            }
+            return;
+        }
+        path.push_back(node->val);
+        expectNumber-=node->val;
+        if(node->left)
+            findPath(node->left,expectNumber,path);
+        if(node->right)
+            findPath(node->right,expectNumber,path);
+    }
+};
