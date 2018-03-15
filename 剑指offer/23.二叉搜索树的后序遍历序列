@@ -1,0 +1,28 @@
+题目描述
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+
+Answer:
+分析：后序遍历如果从后往前看其实是先根节点，再右节点，最后左节点，与前序遍历相似，所以在数组中找到以sequence[n-1]根节点的左子树和右子树的位置，递归遍历
+class Solution {
+public:
+    bool VerifySquenceOfBST(vector<int> sequence) {
+        if(sequence.empty()) return false;
+        return Verify(sequence);
+    }
+    bool Verify(vector<int> sequence) {
+        if(sequence.size()<=2) return true; 
+        int i,n=sequence.size();
+        for(i=0;i<=n-2;i++){
+            if(sequence[i]>sequence[n-1])
+                break;
+        }
+        int left=i;
+        vector<int > leftTree(sequence.begin(),sequence.begin()+left);
+        for(;i<=n-2;i++){
+            if(sequence[i]<sequence[n-1])
+                return false;
+        }
+        vector<int> rightTree(sequence.begin()+left,sequence.end()-1);
+        return Verify(leftTree) && Verify(rightTree);
+    }
+};
