@@ -1,0 +1,37 @@
+题目描述
+输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），返回结果为复制后复杂链表的head。
+（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+
+Answer:
+分析：先next遍历建链表，但建立过程中使用unordered_map把原链表和复制的链表节点对应起来，以便random查找
+
+class Solution {
+public:
+    typedef pair<RandomListNode*,RandomListNode*> node_pair; 
+    RandomListNode* Clone(RandomListNode* pHead) 
+    {
+        if(pHead == NULL) return NULL;
+        unordered_map<RandomListNode*,RandomListNode*> hash;
+        RandomListNode *cHead=new RandomListNode(pHead->label);
+        RandomListNode *cur1=pHead,*cur2=cHead;
+        hash.insert(node_pair(cur1,cur2));
+        while( cur1->next){
+            cur1=cur1->next;
+            cur2->next = new RandomListNode(cur1->label);
+            cur2=cur2->next;
+            hash.insert(node_pair(cur1,cur2));
+        }
+        cur1=pHead;cur2=cHead;
+        while(cur1){
+            if(cur1->random){
+                auto it = hash.find(cur1->random);
+                cur2->random=it->second;
+            }
+            else
+                cur2->random=NULL;
+            cur1=cur1->next;
+            cur2=cur2->next;
+        }
+        return cHead;
+    }
+};
