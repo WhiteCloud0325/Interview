@@ -1,0 +1,33 @@
+题目描述
+输入两棵二叉树A，B，判断B是不是A的子结构。（ps：我们约定空树不是任意一个树的子结构）
+
+Answer1:子结构不同于子树，子结构不用到叶节点都相同,使用递归和回溯来遍历每个结点，要注意初始时pRoot1和pRoot2是否为NULL
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+class Solution {
+public:
+    bool HasSubtree(TreeNode* pRoot1, TreeNode* pRoot2)
+    {
+        if(pRoot2 == NULL || pRoot1 == NULL) return false; //注意初始时pRoot1和pRoot2是否为NULL
+        bool res=DepthSearch(pRoot1,pRoot2);
+        if(res) return res;
+        else return DepthSearch(pRoot1->left,pRoot2) || DepthSearch(pRoot1->right,pRoot2);
+        
+    }
+    bool DepthSearch(TreeNode *pRoot1,TreeNode *pRoot2){
+        if(pRoot2 == NULL) return true;  //说明检测完pRoot2返回true；
+        if(pRoot1 == NULL) return false; //pRoot1遍历完而pRoot2没遍历完，返回false
+        if(pRoot1->val == pRoot2->val)
+            return DepthSearch(pRoot1->left,pRoot2->left) && DepthSearch(pRoot1->right,pRoot2->right);
+        
+        else 
+            return false;
+    }
+};
