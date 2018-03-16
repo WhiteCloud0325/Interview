@@ -20,4 +20,37 @@ public:
 
     }
 };
+Answer2:时间O(n),空间O(1)
+		遍历数组时保存两个值，一个是数字result，一个是次数times；如果一个数字和我们保存的数字相同，则次数+1，不同则次数-1；如果次数为0，则保存此数字。由于要找的数字
+		比其他数字多，则最后一次把数字设为1的数字是我们要检验的数字。
+class Solution {
+public:
+    int MoreThanHalfNum_Solution(vector<int> numbers) {
+        int len = numbers.size();
+        if(len == 0 ) return 0;
+        int times=1,result=numbers[0];
+        for(int i=1;i<len;i++){
+            if(times==0){
+                result=numbers[i];
+                times=1;
+            }
+            else if(numbers[i]==result)
+                times++;
+            else
+                times--;
+        }
+        if(CheckMoreThanHalf(numbers,result)) return result;
+        else return 0;
+
+    }
+    bool CheckMoreThanHalf(vector<int> &numbers,int result){
+        int times=0;
+        for(auto i:numbers){
+            if(i == result)
+                times++;
+        }
+        if(times>numbers.size()/2) return true;
+        else return false;
+    }
+};
 
