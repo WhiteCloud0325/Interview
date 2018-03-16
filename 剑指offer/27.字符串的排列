@@ -1,0 +1,37 @@
+题目描述
+输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+输入描述:
+输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。
+
+
+Answer:
+分析：因为str中有重复字符串，所以先将str排序，相同的字符在一起，对同一位置相同字符已经之前有此字符使用过，则不再在此位置放入此字符
+if(flag[i] || i>0 && str[i]==str[i-1] && !flag[i-1]) continue;
+class Solution {
+public:
+    vector<string> res;
+    vector<bool> flag;
+    vector<string> Permutation(string str) {
+        int len=str.length();
+        if(len ==0 ) return res;
+        flag=vector<bool>(len,false);
+        sort(str.begin(),str.end());
+        string vec;
+        backTrack(str,vec);
+        return res;
+    }
+    void backTrack(string &str, string &vec){
+        if(str.length() == vec.length()){
+            res.push_back(vec);
+            return;
+        }
+        for(int i=0;i<str.length();i++){
+            if(flag[i] || i>0 && str[i]==str[i-1] && !flag[i-1]) continue;
+            flag[i]=true;
+            vec.push_back(str[i]);
+            backTrack(str,vec);
+            vec.pop_back();
+            flag[i]=false;
+        }
+    }
+};
