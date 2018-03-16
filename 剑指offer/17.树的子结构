@@ -18,7 +18,7 @@ public:
         if(pRoot2 == NULL || pRoot1 == NULL) return false; //注意初始时pRoot1和pRoot2是否为NULL
         bool res=DepthSearch(pRoot1,pRoot2);
         if(res) return res;
-        else return DepthSearch(pRoot1->left,pRoot2) || DepthSearch(pRoot1->right,pRoot2);
+        else return HasSubtree(pRoot1->left,pRoot2) || HasSubtree(pRoot1->right,pRoot2);
         
     }
     bool DepthSearch(TreeNode *pRoot1,TreeNode *pRoot2){
