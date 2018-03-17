@@ -1,0 +1,45 @@
+题目描述
+在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。
+并将P对1000000007取模的结果输出。 即输出P%1000000007
+
+Answer:
+分析：本质是使用归并排序，在合并的过程中求逆序对数
+
+lass Solution {
+public:
+    long res=0;
+    int InversePairs(vector<int> data) {
+        merge_sort(data);
+        return res%1000000007;
+    }
+    vector<int> merge(vector<int> &nums1,vector<int> &nums2){
+        auto it1=nums1.begin(),it2=nums2.begin();
+        vector<int> merge_vec;
+        while(it1!=nums1.end() && it2!=nums2.end()){
+            if(*it1<=*it2){
+                merge_vec.push_back(*it1);
+                ++it1;
+            }
+            else{
+                merge_vec.push_back(*it2);
+                res+=nums1.end()-it1;
+                ++it2;
+            }
+        }
+        while(it1!=nums1.end())
+            merge_vec.push_back(*it1++);
+        while(it2!=nums2.end())
+            merge_vec.push_back(*it2++);
+        return merge_vec;
+            
+    }
+    void merge_sort(vector<int> &data){
+        if(data.size() <=1) return;
+        int mid=data.size()/2;
+        vector<int> left(data.begin(),data.begin()+mid);
+        vector<int> right(data.begin()+mid,data.end());
+        merge_sort(left);
+        merge_sort(right);
+        data=merge(left,right);
+    }
+};
