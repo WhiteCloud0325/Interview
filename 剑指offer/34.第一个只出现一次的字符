@@ -1,0 +1,27 @@
+题目描述
+在一个字符串(1<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置
+
+Answer:
+分析：使用hashmap，如果不存在这个字符，则保存它的位置，否则将它的位置置为INT_MAX;
+
+class Solution {
+public:
+    int FirstNotRepeatingChar(string str) {
+        if(str.length()==0) return -1;
+        unordered_map<char,int> hash_map;
+        for(int i=0;i<str.length();i++){
+            auto it=hash_map.find(str[i]);
+            if(it == hash_map.end()){
+                hash_map[str[i]]=i;
+            }
+            else{
+                hash_map[str[i]]=INT_MAX; 
+            }
+        }
+        int res=INT_MAX;
+        for(auto it=hash_map.begin();it!=hash_map.end();it++){
+            res=min(res,it->second);
+        }
+        return res;
+    }
+};
