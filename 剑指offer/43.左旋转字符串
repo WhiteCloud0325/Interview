@@ -5,6 +5,7 @@
 Answer:
 分析:字符串长度len，旋转位数n，n=n%len；n和len的最小公倍数min_com,min_com/n代表几个数为一组循环，min_num/len，代表一共几组
 i代表0，1... min_num/len-1,(j+n)%len !=i为循环截止条件
+
 string LeftRotateString(string str, int n) {
 	int len=str.length();
 	if(len == 0 || n==0) return str;
@@ -25,3 +26,16 @@ string LeftRotateString(string str, int n) {
 	}
 	return str;
 }
+
+Answer2:
+使用翻转方法，因为是左移，先将前n个字符翻转，然后将后几个字符翻转，最后将整个字符串翻转。三次翻转得到结果
+string LeftRotateString(string str, int n) {
+	int len=str.length();
+	if(len == 0 || n==0) return str;
+	reverse(str.begin(),str.begin()+n);
+	reverse(str.begin()+n,str.end());
+	reverse(str.begin(),str.end());
+	return str;
+}
+
+同理：右移n位，先将后n个字符翻转，再翻转前几个字符翻转最后将整个字符串翻转
