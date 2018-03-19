@@ -1,0 +1,88 @@
+Problem
+Supervin has a unique calculator. This calculator only has a display, a plus button, and a minus button. Currently, the integer N is displayed on the calculator display.
+
+Pressing the plus button increases the current number displayed on the calculator display by 1. Similarly, pressing the minus button decreases the current number displayed on the calculator display by 1. The calculator does not display any leading zeros. For example, if 100 is displayed on the calculator display, pressing the minus button once will cause the calculator to display 99.
+
+Supervin does not like odd digits, because he thinks they are "odd". Therefore, he wants to display an integer with only even digits in its decimal representation, using only the calculator buttons. Since the calculator is a bit old and the buttons are hard to press, he wants to use a minimal number of button presses.
+
+Please help Supervin to determine the minimum number of button presses to make the calculator display an integer with no odd digits.
+
+Input
+The first line of the input gives the number of test cases, T. T test cases follow. Each begins with one line containing an integer N: the integer initially displayed on Supervin's calculator.
+
+Output
+For each test case, output one line containing Case #x: y, where x is the test case number (starting from 1) and y is the minimum number of button presses, as described above.
+
+Limits
+1 ≤ T ≤ 100.
+Small dataset
+1 ≤ N ≤ 105.
+Large dataset
+1 ≤ N ≤ 1016.
+Sample
+
+Input 
+ 	
+Output 
+ 
+4
+42
+11
+1
+2018
+
+Case #1: 0
+Case #2: 3
+Case #3: 1
+Case #4: 2
+
+
+Answer:
+分析：找到离得最近的偶数,从这个数最高位开始i（从1到len即数的长度）,如何i是偶数则跳过看下一位,
+      (2)如果i是奇数，如果i位是9，从i位到之后的都变成8，否则看下一位j
+	  (3)如果j小于4则i位-1后面所有都变成8，如果j位大于4则i位+1，之后都变成0，如果j位是4重复(3)步骤
+	  
+uint64_t minDouble(uint64_t n){
+	uint64_t cur = n;
+	vector<uint8_t> bit_num;
+	while (cur){
+		bit_num.push_back(cur%10);
+		cur /= 10;
+	}
+	int i = bit_num.size()-1;
+	bool flag = true;
+	while (i >= 0){
+		if (bit_num[i] % 2 != 0){
+			if (bit_num[i] == 9)
+				flag = true;
+			else{
+				int j = i - 1;
+				while (j >= 0 && bit_num[j] == 4)
+					j--;
+				if (j < 0 || bit_num[j]<4)
+					flag = true;
+				else
+					flag= false;
+			}
+			if (flag){
+				bit_num[i]--;
+				while (i--){
+					bit_num[i] = 8;
+				}
+			}
+			else{
+				bit_num[i]++;
+				while (i--)
+					bit_num[i] = 0;
+			}
+				
+		}
+		--i;
+	}
+	uint64_t m = 0;
+	for (int i = bit_num.size()-1; i >= 0; i--){
+		m = 10 * m + bit_num[i];
+	}
+
+	return (m>n)?(m-n):(n-m);
+}
