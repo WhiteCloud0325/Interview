@@ -24,3 +24,21 @@ bool IsContinuous( vector<int> numbers ) {
 	if(num>=0) return true;
 	else return false; 
 }
+
+Answer2:顺子条件：1没有重复2.最大牌和最小牌差小于5
+bool IsContinuous( vector<int> numbers ) {
+	if(numbers.size()<5) return false;
+	int flag=0; //用flag做标志位来记录是否有且是否重复
+	int min_card=14,max_card=-1;
+	for(auto i:numbers){
+		if(0==i) continue;
+		if((flag>>i & 1) ==1) return false;
+		else{
+			flag |= 1<<i;
+			min_card=min(min_card,i);
+			max_card=max(max_card,i);
+		}
+	}
+	if(max_card-min_card<5) return true;
+	else return false;
+}
