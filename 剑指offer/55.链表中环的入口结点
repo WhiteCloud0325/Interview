@@ -1,0 +1,30 @@
+题目描述
+一个链表中包含环，请找出该链表的环的入口结点。
+
+Answer:
+分析：用两个指针从头指针开始，一个步长为1，一个步长为2，如果两个指针相遇说明链表有环，否则返回NULL链表没有环
+如果有环，设环入口点为距离头指针x，相遇位置距离入口a，环长度c
+则步长为1：L1=x+mc+a;步长为2:L2=x+nc+a；且L2=2L1
+推出：x=(n-2m)-a; x=(n-2m-1)+c-a;
+则一个指针从相遇点继续，另一个从头指针开始，则两个指针相遇点为环入口点
+
+ListNode *detectCycle(ListNode *head) {
+	if(head==NULL) return NULL;
+	ListNode *slow=head,*fast=head;
+	while(1){
+		slow=slow->next;
+		if(fast->next==NULL) return NULL;
+		fast=fast->next;
+		if(fast->next==NULL) return NULL;
+		fast=fast->next;
+		if(fast==slow)
+			break;
+	}
+	fast=head;
+	while(fast!=slow){
+		fast=fast->next;
+		slow=slow->next;
+	}
+	return slow;
+	
+}
