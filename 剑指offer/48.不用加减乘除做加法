@@ -1,0 +1,31 @@
+题目描述
+写一个函数，求两个整数之和，要求在函数体内不得使用+、-、*、/四则运算符号
+
+Answer:使用按位运算， sum=bit1 ^ bit2^carry;carry=(bit1&bit2) | ((bit1^bit2)&carry)
+int Add(int num1, int num2)
+{
+	int carry=0,res=0;
+	int i=0;
+	while(i<32){
+		int bit1=num1 & (1<<i);
+		int bit2=num2 & (1<<i);
+		res|=bit1 ^ bit2 ^carry;
+		carry = (bit1&bit2) | ((bit1^bit2)&carry) ;
+		carry<<=1;
+		++i;
+	}
+	return res;
+}
+
+Answer2:两个数先按位异或运算，然后按位与计算carry，num1=sum，num2=carry<<1作为下一次运算的两个加数，但carry=0时运算结束
+int Add(int num1, int num2)
+{
+	int sum, carry;
+	do{
+		sum = num1^num2;
+		carry = (num1 &num2) << 1;
+		num1 = sum;
+		num2 = carry;
+	} while (num2 != 0);
+	return num1;
+}
