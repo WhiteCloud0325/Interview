@@ -1,0 +1,24 @@
+
+描述：
+设计一个算法，计算出n阶乘中尾部零的个数
+
+样例：
+11! = 39916800，因此应该返回 2
+
+Answer：
+class Solution {
+public:
+    /*
+     * @param n: A long integer
+     * @return: An integer, denote the number of trailing zeros in n!
+     */
+    long long trailingZeros(long long n) {
+        // write your code here, try to do it without arithmetic operators.
+        long long res=0;
+        while(n){
+            res+= n/5;
+            n/=5;
+        }
+        return res;
+    }
+};
