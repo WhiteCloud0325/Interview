@@ -51,3 +51,28 @@ public:
         return res;   
     }
 };
+
+Answer2:最快方法：先i从0到n-1 遍历，再从res遍历，每个子集添加i构成新的子集合
+class Solution {
+public:
+    /**
+     * @param nums: A set of numbers
+     * @return: A list of lists
+     */
+    vector<vector<int>> subsets(vector<int> &nums) {
+        // write your code here
+        int n = nums.size();
+        sort(nums.begin(),nums.end());
+        vector<vector<int>> res;
+        res.push_back(vector<int>());
+        for(int i=0;i<n;++i){
+            int m=res.size();
+            for(int j=0;j<m;j++){
+                vector<int> temp = res[j];
+                temp.push_back(nums[i]);
+                res.push_back(temp);
+            }
+        }
+        return res;
+    }
+};
