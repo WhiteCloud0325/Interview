@@ -1,0 +1,51 @@
+描述 给定一个字符串source和一个目标字符串target，在字符串source中找到包括所有目标字符串字母的子串。
+如果在source中没有这样的子串，返回""，如果有多个这样的子串，返回起始位置最小的子串。 
+说明
+在答案的子串中的字母在目标字符串中是否需要具有相同的顺序？
+
+——不需要。
+样例
+给出source = "ADOBECODEBANC"，target = "ABC" 满足要求的解  "BANC"
+
+Answer:hash和滑动窗口算法经典题目，先对target进行hash，然后对source进行滑动窗口，end遍历，当窗口内包含了目标全部
+字母后，滑动start，找到最短子串。
+string minWindow(string &source , string &target) {
+    // write your code here
+    string res="";
+    if(source.empty() || target.empty()){
+        return res;
+    }
+    int to_find[256]={0};
+    int found[256]={0};
+    for(int i=0;i<target.size();++i){
+        to_find[target[i]]++;
+    }
+    int start=0,end=0;
+    int target_len=target.size(),len=0;
+    int min_len = INT_MAX;
+    for(;end<source.size();++end){
+        char temp=source[end];
+        if(to_find[temp] == 0){
+            continue;
+        }
+        found[temp]++;
+        if(found[temp] <=to_find[temp]){
+            ++len;
+        }
+        if(len == target_len){
+            while( to_find[source[start]] == 0 || found[source[start]]> to_find[source[start]]){
+                if(found[source[start]] > to_find[source[start]]){
+                    found[source[start]]--; 
+                }
+                start++;
+            }
+            if((end-start+1) < min_len){
+                min_len=end-start+1;
+                res=source.substr(start,min_len);
+            }
+        }
+
+    }
+    return res;
+
+}
