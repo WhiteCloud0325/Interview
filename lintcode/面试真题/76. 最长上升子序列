@@ -1,0 +1,41 @@
+描述
+给定一个整数序列，找到最长上升子序列（LIS），返回LIS的长度。
+说明
+最长上升子序列的定义：
+
+最长上升子序列问题是在一个无序的给定序列中找到一个尽可能长的由低到高排列的子序列，这种子序列不一定是连续的或者唯一的。
+https://en.wikipedia.org/wiki/Longest_increasing_subsequence
+样例
+给出 [5,4,1,2,3]，LIS 是 [1,2,3]，返回 3
+给出 [4,2,4,5,3,7]，LIS 是 [2,4,5,7]，返回 4
+挑战
+要求时间复杂度为O(n^2) 或者 O(nlogn)
+
+Answer1:动态规划 时间复杂度O(n^2),空间复杂度O(n)
+思路：vector<int> dp保存的是dp[i]表示最长子序列i-1的最小数字，对nums遍历，然后nums[j]插入当前最长子序列中最小位置
+class Solution {
+public:
+    /**
+     * @param nums: An integer array
+     * @return: The length of LIS (longest increasing subsequence)
+     */
+    int longestIncreasingSubsequence(vector<int> &nums) {
+        // write your code here
+        int n= nums.size();
+        vector<int> dp;
+        for(int i=0;i<nums.size();++i){
+            int j=0;
+            for(;j<dp.size();j++){
+                if(dp[j]>=nums[i]){
+                    dp[j] = nums[i];
+                    break;
+                }
+            }
+            if(j == dp.size()){
+                dp.push_back(nums[i]);
+            }
+        }
+        return dp.size();
+        
+    }
+};
