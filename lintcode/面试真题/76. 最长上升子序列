@@ -39,3 +39,4 @@ public:
         
     }
 };
+Answer2:在搜索nums[i]在dp的位置时使用二分法时间复杂度为O（nlogn）
