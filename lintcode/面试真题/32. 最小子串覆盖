@@ -49,3 +49,39 @@ string minWindow(string &source , string &target) {
     return res;
 
 }
+ string minWindow(string &source , string &target) {
+        // write your code here
+        string res="";
+        if(source.empty() || target.empty()){
+            return res;
+        }
+        int to_find[128]={0};
+        int found[128]={0};
+        for(int i = 0; i < target.size(); ++i){
+            to_find[target[i]]++;
+        }
+        int start = 0, end = 0;
+        int totoal = target.size();
+        int cur=0;
+        while(end < source.size()){
+            found[source[end]]++;
+            if(found[source[end]] <= to_find[source[end]]){
+                cur++;
+            }
+            while(start <= end && totoal == cur){
+                char temp = source[start];
+                found[temp]--;
+                if(found[temp]>=0 && found[temp]<to_find[temp]){
+                    cur--;
+                    if(res.empty() || end-start+1 < res.size()){
+                        res = source.substr(start,end-start+1);
+                    }
+                }
+                start++;
+            }
+                
+            
+            ++end;
+        }
+        return res;
+    }
