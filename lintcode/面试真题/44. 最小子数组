@@ -1,0 +1,29 @@
+描述
+给定一个整数数组，找到一个具有最小和的子数组。返回其最小和。
+子数组最少包含一个数字
+样例
+给出数组[1, -1, -2, 1]，返回 -3
+
+Answer:
+class Solution {
+public:
+    /*
+     * @param nums: a list of integers
+     * @return: A integer indicate the sum of minimum subarray
+     */
+    int minSubArray(vector<int> &nums) {
+        // write your code here
+        int res=INT_MAX;
+        int sum=0;
+        for(auto i :nums){
+            if(sum+i >i){
+                sum=i;
+            }
+            else{
+                sum+=i;
+            }
+            res=min(sum,res);
+        }
+        return res;
+    }
+};
