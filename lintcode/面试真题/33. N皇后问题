@@ -1,0 +1,73 @@
+描述
+n皇后问题是将n个皇后放置在n*n的棋盘上，皇后彼此之间不能相互攻击。
+
+给定一个整数n，返回所有不同的n皇后问题的解决方案。
+
+每个解决方案包含一个明确的n皇后放置布局，其中“Q”和“.”分别表示一个女王和一个空位置。
+样例
+对于4皇后问题存在两种解决的方案：
+
+[
+
+    [".Q..", // Solution 1
+
+     "...Q",
+
+     "Q...",
+
+     "..Q."],
+
+    ["..Q.", // Solution 2
+
+     "Q...",
+
+     "...Q",
+
+     ".Q.."]
+
+]
+class Solution {
+public:
+    /*
+     * @param n: The number of queens
+     * @return: All distinct solutions
+     */
+    vector<vector<string>> res;
+    int q_n;
+    vector<vector<string>> solveNQueens(int n) {
+        // write your code here
+        q_n=n;
+        vector<string> n_res(n,string(n,'.'));
+        vector<vector<bool>> flag(n,vector<bool>(n,true));
+        backtracking(0,n_res,flag);
+        return res;
+    }
+    void backtracking(int pos, vector<string> &n_res,vector<vector<bool>> flag){
+        if(pos== q_n){
+            res.push_back(n_res);
+            return;
+        }
+        int i=0;
+        while(i<q_n){
+            if(flag[pos][i]){
+                vector<vector<bool>> next_flag=flag;
+                for(int j=pos+1;j<q_n;++j){
+                    next_flag[j][i]=false;
+                }
+                int j=pos,k=i;
+                while(j<q_n && k>=0){
+                    next_flag[j++][k--]=false;
+                }
+                j=pos;
+                k=i;
+                while(j<q_n && k<q_n){
+                    next_flag[j++][k++]=false;
+                }
+                n_res[pos][i]='Q';
+                backtracking(pos+1,n_res,next_flag);
+                n_res[pos][i]='.';
+            }
+            ++i;
+        }
+    }
+};
