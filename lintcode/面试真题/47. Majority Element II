@@ -1,0 +1,46 @@
+描述
+给定一个整型数组，找到主元素，它在数组中的出现次数严格大于数组元素个数的三分之一。
+数组中只有唯一的主元素
+样例
+给出数组[1,2,1,2,1,3,3] 返回 1
+挑战
+要求时间复杂度为O(n)，空间复杂度为O(1)。
+
+Answer:
+int majorityNumber(vector<int> &nums) {
+    // write your code here
+    int a=0,b=0;
+    int numa=0,numb=0;
+    for(int i=0;i<nums.size();++i){
+        if(numa == 0 && b!=nums[i]){
+            a = nums[i];
+            numa++;
+            continue;
+        }
+        if(numb ==0 && a!=nums[i]){
+            b = nums[i];
+            numb++;
+            continue;
+        }
+        if(a == nums[i]){
+            numa++;
+        }
+        else if(b == nums[i]){
+            numb++;
+        }
+        else{
+            numa--;
+            numb--;
+        }
+    }
+    int suma=0,sumb=0;
+    for(int i=0;i<nums.size();++i){
+        if(nums[i] == a){
+            suma++;
+        }
+        if(nums[i] == b){
+            sumb++;
+        }
+    }
+    return (suma > sumb)?a:b;
+}
