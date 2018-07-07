@@ -1,0 +1,37 @@
+描述
+给出两个字符串，找到最长公共子串，并返回其长度。
+
+
+子串的字符应该连续的出现在原字符串中，这与子序列有所不同。
+样例
+给出A=“ABCD”，B=“CBCE”，返回 2
+挑战
+O(n x m) time and memory.
+
+Answer:
+class Solution {
+public:
+    /**
+     * @param A: A string
+     * @param B: A string
+     * @return: the length of the longest common substring.
+     */
+    int longestCommonSubstring(string &A, string &B) {
+        // write your code here
+        int m = A.size(), n = B.size();
+        vector<vector<int>> dp(m+1,vector<int>(n+1,0));
+        int res = 0;
+        for(int i=1; i<=m; ++i){
+            for(int j=1; j<=n; ++j){
+                if(A[i-1] == B[j-1]){
+                    dp[i][j]=dp[i-1][j-1]+1;
+                }
+                else{
+                    dp[i][j] = 0;
+                }
+                res = max(res,dp[i][j]);
+            }
+        }
+        return res;
+    }
+};
