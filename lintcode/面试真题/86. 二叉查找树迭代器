@@ -29,52 +29,63 @@ Answer:
  *         this->left = this->right = NULL;
  *     }
  * }
+ * Example of iterate a tree:
+ * BSTIterator iterator = BSTIterator(root);
+ * while (iterator.hasNext()) {
+ *    TreeNode * node = iterator.next();
+ *    do something for node
  */
 
 
-class Solution {
+class BSTIterator {
 public:
     /*
-     * @param root: The root of the binary search tree.
-     * @param value: Remove the node with given value.
-     * @return: The root of the binary search tree after removal.
+    * @param root: The root of binary tree.
+    */
+    BSTIterator(TreeNode * root) {
+        // do intialization if necessary
+        cur = root;
+        TreeNode *pre = NULL;
+        preprocess(cur, pre);
+        while(cur && cur->left){
+            cur = cur->left;
+        }
+    }
+
+    /*
+     * @return: True if there has next node, or false
      */
-    TreeNode * removeNode(TreeNode * root, int value) {
+    bool hasNext() {
         // write your code here
-        TreeNode **pre = &root;
-        TreeNode **node = &root;
-        TreeNode *cur = root;
-        while(cur && cur->val !=value){
-            if(cur->val < value){
-                node = &(cur->right);
-                cur = cur->right;
-            }
-            else{
-                node = &(cur->left);
+        return cur != NULL;
+    }
+
+    /*
+     * @return: return next node
+     */
+    TreeNode * next() {
+        // write your code here
+        TreeNode *res = cur;
+        if(cur){
+            cur = cur->right;
+            while(cur && cur->left && (cur->left->val > res->val) ){
                 cur = cur->left;
             }
         }
-        if(cur){
-            TreeNode* temp = cur;
-            if(cur->left && cur->right){
-                *node = cur->right;
-                cur = cur->right;
-                while(cur->left){
-                    cur = cur->left;
-                }
-                cur->left = temp->left;
-            }
-            else if(cur->left && !cur->right){
-                *node =cur->left;
-            }
-            else if(!cur->left && cur->right){
-                *node = cur->right;
-            }
-            else{
-                *node = NULL;
-            }
-            delete temp;
-        }
-        return *pre;
+        return res;
     }
+    
+    void preprocess(TreeNode* root, TreeNode* &pre){
+        if(!root){
+            return;
+        }
+        preprocess(root->left,pre);
+        if(pre && !pre->right){
+            pre->right = root;
+        }
+        pre = root;
+        preprocess(root->right,pre);
+    }
+private:
+    TreeNode *cur;
 };
