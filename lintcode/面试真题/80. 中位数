@@ -1,0 +1,48 @@
+描述
+给定一个未排序的整数数组，找到其中位数。
+
+中位数是排序后数组的中间值，如果数组的个数是偶数个，则返回排序后数组的第N/2个数。
+样例
+给出数组[4, 5, 1, 2, 3]， 返回 3
+
+给出数组[7, 9, 4, 5]，返回 5
+挑战
+时间复杂度为O(n)
+
+
+Answer:
+class Solution {
+public:
+    /**
+     * @param nums: A list of integers
+     * @return: An integer denotes the middle number of the array
+     */
+    int median(vector<int> &nums) {
+        // write your code here
+        int mid = (nums.size()-1)/2;
+        return quickSort(nums,0,nums.size(),mid);
+        
+    }
+    int quickSort(vector<int> &nums,int start,int end,int mid){
+        if(end - start ==1){
+            return nums[start];
+        }
+        int target = nums[start];
+        int i=start,j=end-1;
+        while(i<j){
+            while(i<j && nums[j]>=target) j--;
+            nums[i]=nums[j];
+            while(i<j &&nums[i]<= target) i++;
+            nums[j]=nums[i];
+        }
+        if(i == mid){
+            return target;
+        }
+        else if(i<mid){
+            return quickSort(nums,i+1,end,mid);
+        }
+        else{
+            return quickSort(nums,start,i,mid);
+        }
+    }
+};
