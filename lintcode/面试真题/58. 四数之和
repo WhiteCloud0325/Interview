@@ -1,0 +1,67 @@
+描述
+给一个包含n个数的整数数组S，在S中找到所有使得和为给定整数target的四元组(a, b, c, d)。
+四元组(a, b, c, d)中，需要满足a <= b <= c <= d
+答案中不可以包含重复的四元组。
+
+样例
+例如，对于给定的整数数组S=[1, 0, -1, 0, -2, 2] 和 target=0. 满足要求的四元组集合为：
+
+(-1, 0, 0, 1)
+
+(-2, -1, 1, 2)
+
+(-2, 0, 0, 2)
+class Solution {
+public:
+    /**
+     * @param numbers: Give an array
+     * @param target: An integer
+     * @return: Find all unique quadruplets in the array which gives the sum of zero
+     */
+    vector<vector<int>> fourSum(vector<int> &numbers, int target) {
+        // write your code here
+        sort(numbers.begin(),numbers.end());
+        vector<vector<int>> res;
+        for(int i=0;i<numbers.size();i++){
+            
+            if(i>0 && numbers[i]==numbers[i-1]){
+                continue;
+            }
+            for(int j=i+1;j<numbers.size();j++){
+                if(j>i+1 && numbers[j]==numbers[j-1]){
+                    continue;
+                }
+                int m=j+1,n=numbers.size()-1;
+                int temptarget=target-numbers[i]-numbers[j];
+                while(m<n){
+                    if(m>j+1 && numbers[m]==numbers[m-1]){
+                        ++m;
+                        continue;
+                    }
+                    if(n<numbers.size()-1 && numbers[n] == numbers[n+1]){
+                        --n;
+                        continue;
+                    }
+                    if(numbers[m]+numbers[n] ==temptarget){
+                        vector<int> temp;
+                        temp.push_back(numbers[i]);
+                        temp.push_back(numbers[j]);
+                        temp.push_back(numbers[m]);
+                        temp.push_back(numbers[n]);
+                        res.push_back(temp);
+                        ++m;
+                        --n;
+                    }
+                    else if(numbers[m]+numbers[n]<temptarget){
+                        ++m;
+                    }
+                    else{
+                        --n;
+                    }
+                    
+                }
+            }
+        }
+        return res;
+    }
+};
