@@ -1,0 +1,45 @@
+描述
+跟进“搜索旋转排序数组”，假如有重复元素又将如何？
+
+是否会影响运行时间复杂度？
+
+如何影响？
+
+为何会影响？
+
+写出一个函数判断给定的目标值是否出现在数组中。
+样例
+给出[3,4,4,5,7,0,1,2]和target=4，返回 true
+
+class Solution {
+public:
+    /**
+     * @param A: an integer ratated sorted array and duplicates are allowed
+     * @param target: An integer
+     * @return: a boolean 
+     */
+    bool search(vector<int> &A, int target) {
+        // write your code here
+        if(A.empty()){
+            return false;
+        }
+        int left=0,right=A.size()-1,mid;
+        while(left<=right){
+            mid=(left+right)/2;
+            if(A[mid]==target || A[left]==target || A[right]==target){
+                return true;
+            }
+            else if(A[mid]==A[left] || A[mid]==A[right]){
+                ++left;    
+            }
+            else if(target<A[mid]^(A[mid]<A[right])^(target<A[right])){
+                right=mid-1;
+            }
+            else{
+                left=mid+1;
+            }
+            
+        }
+        return false;
+    }
+};
