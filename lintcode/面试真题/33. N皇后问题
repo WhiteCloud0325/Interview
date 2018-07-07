@@ -71,3 +71,42 @@ public:
         }
     }
 };
+class Solution {
+public:
+    /*
+     * @param n: The number of queens
+     * @return: All distinct solutions
+     */
+    vector<vector<string>> res;
+    int N =0;
+    vector<vector<string>> solveNQueens(int n) {
+        // write your code here
+        N = n;
+        vector<int> flag(n, 0);
+        vector<string> cur(n, string(n, '.' ));
+        backTracking(0, flag, cur);
+        return res;
+    }
+    void backTracking(int t, vector<int> &flag, vector<string>& cur){
+        if(t == N){
+            res.push_back(cur);
+            return;
+        }
+        for(int i = 0; i < N; ++i){
+            bool isfound = true;
+            for(int j = 0; j < t; ++j){
+                if(flag[j] == i || t-j == abs(i-flag[j])){
+                    isfound = false;
+                    break;
+                }
+            }
+            if(isfound){
+                flag[t] = i;
+                cur[t][i]='Q';
+                backTracking(t+1, flag, cur);
+                cur[t][i]='.';
+            }
+           
+        }
+    }
+};
