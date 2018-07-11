@@ -1,0 +1,44 @@
+90. k数和 II
+描述
+Given n unique integers, number k (1<=k<=n) and target.
+
+Find all possible k integers where their sum is target.
+样例
+给出[1,2,3,4]，k=2， target=5，返回 [[1,4],[2,3]]
+Answer:深度优先搜索，先将数组排个序，便于比较，k,target,pos,temp为深搜目标
+class Solution {
+public:
+    /*
+     * @param A: an integer array
+     * @param k: a postive integer <= length(A)
+     * @param target: an integer
+     * @return: A list of lists of integer
+     */
+    vector<vector<int>> kSumII(vector<int> &A, int k, int target) {
+        // write your code here
+        vector<vector<int>> res;
+        sort(A.begin(),A.end());
+        int n = A.size();
+        if(n < k){
+            return res;
+        }
+        vector<int> temp;
+        depthSearch(A, k, target, 0, temp, res);
+        return res;
+        
+    }
+    void depthSearch(vector<int> &A, int k, int target,int pos, vector<int> &temp,vector<vector<int>> &res){
+        if( k == 0 && target ==0){
+            res.push_back(temp);
+            return;
+        }
+        for(int i = pos; i < A.size(); ++i){
+            if(A[i] > target){    //由于提前将A排序,所以 A[i]>target的不必继续搜索下去
+                break;
+            }
+            temp.push_back(A[i]);
+            depthSearch(A, k-1, target-A[i], i+1, temp, res);
+            temp.pop_back();
+        }
+    }
+};
