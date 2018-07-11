@@ -1,0 +1,51 @@
+描述
+给定n个不同的正整数，整数k（k < = n）以及一个目标数字。　
+
+在这n个数里面找出K个数，使得这K个数的和等于目标数字，求问有多少种方案？
+样例
+给出[1,2,3,4]，k=2， target=5，[1,4] and [2,3]是2个符合要求的方案
+
+Answer:三维动态规划，遍历分别从 目标个数k，数组大小j，和目标数字val， dp[k+1][sz][target+1]
+class Solution {
+public:
+    /**
+     * @param A: An integer array
+     * @param k: A positive integer (k <= length(A))
+     * @param target: An integer
+     * @return: An integer
+     */
+    int kSum(vector<int> &A, int k, int target) {
+        // write your code here
+        sort(A.begin(),A.end());
+        int n =A.size();
+        if(n < k){
+            return 0;
+        }
+        vector<vector<vector<int> > > dp(k+1,vector<vector<int>>(n+1,vector<int>(target+1,0)));
+        //初始化，因为数组是n个不同数，对于A[i-1] < target且 目标个数k = 1，进行初初始化
+        for(int i =1; i <=n; ++i){
+            if(A[i-1] <= target){
+                for(int j = i; j <=n; ++j){
+                    dp[1][j][A[i-1]] = 1;
+                }
+            }
+        }
+        
+        for(int i =2; i <= k; ++i){
+            for(int j =i; j <= n; ++j){
+                for(int val =1; val <= target; ++val){
+                    //状态方程1 j>i时，对于目标数为i，target=val，数组大小为j的结果包含数组为j-1的结果
+                    if(j > i){
+                        dp[i][j][val] += dp[i][j-1][val];
+                    }
+                    // 对于A[j-1] <=val时，dp[i][j][val]+=dp[i-1][j-1][val-A[j-1]]
+                    if(val >= A[j-1]){
+                        dp[i][j][val] += dp[i-1][j-1][val - A[j-1]];
+                    }
+                }
+            }
+        }
+        return dp[k][n][target];
+        
+    }
+};
