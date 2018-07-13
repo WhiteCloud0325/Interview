@@ -1,0 +1,38 @@
+描述
+实现 int sqrt(int x) 函数，计算并返回 x 的平方根。
+样例
+sqrt(3) = 1
+
+sqrt(4) = 2
+
+sqrt(5) = 2
+
+sqrt(10) = 3
+挑战
+O(log(x))
+
+Answer: 二分查找
+class Solution {
+public:
+    /**
+     * @param x: An integer
+     * @return: The sqrt of x
+     */
+    int sqrt(int x) {
+        // write your code here
+        int left = 0, right = x, mid = 0;
+        while(left < right){
+            mid = left + (right - left) / 2 +1 ; //因为 left = mid ，+1防止死循环
+            if(mid  == x/mid){   // mid*mid == x  ，使用mid*mid 或超出上限
+                return mid;
+            }
+            if( x/mid < mid ){
+                right = mid -1;
+            }
+            else{
+                left = mid;       //找到符合 mid*mid < x 的最大上限
+            }
+        }
+        return left;
+    }
+};
