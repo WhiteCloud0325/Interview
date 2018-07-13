@@ -1,0 +1,27 @@
+描述
+找到单链表倒数第n个节点，保证链表中节点的最少数量为n。
+例
+给出链表 3->2->1->5->null和n = 2，返回倒数第二个节点的值1.
+
+Answer: 设一共m个节点，先从head到第n+1个节点，则还剩m-n-1，然后分别res从head节点和cur节点遍历，则res就是倒数第n个节点，即第m-n节点
+class Solution {
+public:
+    /*
+     * @param head: The first node of linked list.
+     * @param n: An integer
+     * @return: Nth to last node of a singly linked list. 
+     */
+    ListNode * nthToLast(ListNode * head, int n) {
+        // write your code here
+        ListNode * cur = head;
+        for(int i=1; i<=n;++i){  
+            cur = cur->next;
+        }
+        ListNode * res = head;
+        while(cur){
+            cur = cur->next;
+            res = res->next;
+        }
+        return res;
+    }
+};
