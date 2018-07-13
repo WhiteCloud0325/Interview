@@ -1,0 +1,52 @@
+描述
+将两个排序链表合并为一个新的排序链表
+
+样例
+给出 1->3->8->11->15->null，2->null， 返回 1->2->3->8->11->15->null。
+
+/**
+ * Definition of singly-linked-list:
+ * class ListNode {
+ * public:
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int val) {
+ *        this->val = val;
+ *        this->next = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param l1: ListNode l1 is the head of the linked list
+     * @param l2: ListNode l2 is the head of the linked list
+     * @return: ListNode head of linked list
+     */
+    ListNode * mergeTwoLists(ListNode * l1, ListNode * l2) {
+        // write your code here
+        ListNode *root = new ListNode(0); //为了方便比较，建立一个头结点
+        ListNode *cur = root;
+        while(l1 && l2){
+            if(l1->val <= l2->val){
+                cur->next = l1;
+                l1 = l1->next;
+            }
+            else{
+                cur->next = l2;
+                l2 = l2->next;
+            }
+            cur = cur->next;
+        }
+        if(l1){
+            cur->next = l1;
+        }
+        if(l2){
+            cur->next = l2;
+        }
+        cur = root->next;
+        delete root;
+        return cur;
+    }
+};
