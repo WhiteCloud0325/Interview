@@ -1,0 +1,62 @@
+描述
+合并k个排序链表，并且返回合并后的排序链表。尝试分析和描述其复杂度。
+
+样例
+给出3个排序链表[2->4->null,null,-1->null]，返回 -1->2->4->null
+
+Answer:使用最小堆，容器使用priority_queue, priority_queue<ListNode*, vector<ListNode*>, cmp>
+cmp = less<T> 是最大堆， cmp = greater<T>是最小堆
+priority_queue默认是less<T>是最大堆
+/**
+ * Definition of ListNode
+ * class ListNode {
+ * public:
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int val) {
+ *         this->val = val;
+ *         this->next = NULL;
+ *     }
+ * }
+ */
+class Solution {
+public:
+    /**
+     * @param lists: a list of ListNode
+     * @return: The head of one sorted list.
+     */
+    ListNode *mergeKLists(vector<ListNode *> &lists) {
+        // write your code here
+        priority_queue<ListNode*, vector<ListNode*>, cmp> min_heap;
+        int n = lists.size();
+        for(int i =0; i<n; ++i){
+            if(lists[i]){
+                min_heap.push(lists[i]);
+            }
+        }
+        ListNode * head = new ListNode(0);
+        ListNode* cur = head;
+        while(!min_heap.empty()){
+            ListNode *temp = min_heap.top();
+            min_heap.pop();
+            cur->next = temp;
+            cur = cur->next;
+            if(temp->next){
+                min_heap.push(temp->next);
+            }
+        }
+        cur = head->next;
+        delete head;
+        return cur;
+    }
+    struct cmp{
+        bool operator() (ListNode* &lhs, ListNode* &rhs){
+            if(lhs->val >  rhs->val){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    };
+};
