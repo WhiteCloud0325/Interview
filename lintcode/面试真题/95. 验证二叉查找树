@@ -1,0 +1,62 @@
+描述
+给定一个二叉树，判断它是否是合法的二叉查找树(BST)
+
+一棵BST定义为：
+
+节点的左子树中的值要严格小于该节点的值。
+节点的右子树中的值要严格大于该节点的值。
+左右子树也必须是二叉查找树。
+一个节点的树也是二叉查找树。
+样例
+一个例子：
+
+  2
+ / \
+1   4
+   / \
+  3   5
+上述这棵二叉树序列化为 {2,1,4,#,#,3,5}.
+
+Answer:深度优先搜索，加前向索引， 对于二叉排序树中序遍历，当前节点一定比他的前向索引大
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: The root of binary tree.
+     * @return: True if the binary tree is BST, or false
+     */
+    bool isValidBST(TreeNode * root) {
+        // write your code here
+        long long pre = (long long)INT_MIN-1;
+        return depthSearch(root,pre);
+        
+        
+    }
+    bool depthSearch(TreeNode* root, long long &pre){
+        if(!root){
+            return true;
+        }
+        bool l = depthSearch(root->left, pre);
+        if(!l || root->val <= pre){
+            return false;
+        }
+        else{
+            pre = root->val;
+        }
+        bool r = depthSearch(root->right,pre);
+        return r;
+        
+    }
+};
