@@ -1,0 +1,40 @@
+描述
+写出一个函数 anagram(s, t) 判断两个字符串是否可以通过改变字母的顺序变成一样的字符串。
+说明
+What is Anagram?
+
+Two strings are anagram if they can be the same after change the order of characters.
+样例
+给出 s = "abcd"，t="dcab"，返回 true.
+给出 s = "ab", t = "ab", 返回 true.
+给出 s = "ab", t = "ac", 返回 false.
+挑战
+O(n) time, O(1) extra space
+
+class Solution {
+public:
+    /**
+     * @param s: The first string
+     * @param t: The second string
+     * @return: true or false
+     */
+    bool anagram(string &s, string &t) {
+        // write your code here
+        int m = s.size(), n = t.size();
+        if(m != n ){
+            return false;
+        }
+        int flag[256]={0};
+        for(int i=0; i<m; ++i){
+            flag[s[i]]++;
+        }
+        for(int i=0; i<n; ++i){
+            flag[t[i]]--;
+            if(flag[t[i]] < 0){
+                return false;
+            }
+        }
+        return true;
+        
+    }
+};
