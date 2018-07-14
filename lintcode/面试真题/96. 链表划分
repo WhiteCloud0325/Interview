@@ -1,0 +1,56 @@
+描述
+给定一个单链表和数值x，划分链表使得所有小于x的节点排在大于等于x的节点之前。
+
+你应该保留两部分内链表节点原有的相对顺序。
+样例
+给定链表 1->4->3->2->5->2->null，并且 x=3
+
+返回 1->2->2->4->3->5->null
+
+Answer:
+/**
+ * Definition of singly-linked-list:
+ * class ListNode {
+ * public:
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int val) {
+ *        this->val = val;
+ *        this->next = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param head: The first node of linked list
+     * @param x: An integer
+     * @return: A ListNode
+     */
+    ListNode * partition(ListNode * head, int x) {
+        // write your code here
+        ListNode *prehead = new ListNode(0);
+        prehead->next = head;
+        ListNode* pre = prehead;
+        while(pre->next && pre->next->val < x){
+            pre = pre->next;
+        }
+        ListNode* cur = pre;
+        while(cur ->next){
+            if(cur->next->val < x){
+                ListNode *node = cur->next;
+                cur->next = cur->next->next;
+                node->next = pre->next;
+                pre->next = node;
+                pre  = node;
+            }
+            else{
+                cur = cur->next;
+            }
+        }
+        pre = prehead->next;
+        delete prehead;
+        return pre;
+    }
+};
