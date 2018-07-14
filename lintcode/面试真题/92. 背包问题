@@ -1,0 +1,40 @@
+描述
+在n个物品中挑选若干物品装入背包，最多能装多满？假设背包的大小为m，每个物品的大小为A[i]
+样例
+如果有4个物品[2, 3, 5, 7]
+
+如果背包的大小为11，可以选择[2, 3, 5]装入背包，最多可以装满10的空间。
+
+如果背包的大小为12，可以选择[2, 3, 7]装入背包，最多可以装满12的空间。
+
+函数需要返回最多能装满的空间大小。
+挑战
+O(n x m) time and O(m) memory.
+
+O(n x m) memory is also acceptable if you do not know how to optimize memory.
+
+Answer:动态规划，背包重量为中间状态，dp[m+1]={false},dp[j] = dp[j-A[i]]
+class Solution {
+public:
+    /**
+     * @param m: An integer m denotes the size of a backpack
+     * @param A: Given n items with size A[i]
+     * @return: The maximum size
+     */
+    int backPack(int m, vector<int> &A) {
+        // write your code here
+        sort(A.begin(), A.end());
+        vector<bool> dp(m+1, false);
+        int res = 0;
+        dp[0] = true;
+        for(int i=0; i<A.size(); ++i){
+            for(int j = m; j>=A[i]; --j){
+                dp[j] = dp[j-A[i]];
+                if(dp[j]){
+                    res= max(res,j);
+                }
+            }
+        }
+        return res;
+    }
+};
