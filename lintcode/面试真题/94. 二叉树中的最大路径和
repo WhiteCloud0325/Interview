@@ -1,0 +1,55 @@
+描述
+给出一棵二叉树，寻找一条路径使其路径和最大，
+路径可以在任一节点中开始和结束（路径和为两个节点之间所在路径上的节点权值之和）
+样例
+给出一棵二叉树：
+
+       1
+      / \
+     2   3
+返回 6
+
+Answer:深度优先搜索
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: The root of binary tree.
+     * @return: An integer
+     */
+    int maxPathSum(TreeNode * root) {
+        // write your code here
+        int res = INT_MIN;
+        deepSearch(root, res);
+        return res;
+    }
+    int deepSearch(TreeNode *root, int &res){
+        if(root == NULL){
+            return 0;
+        }
+        int lsum = deepSearch(root->left, res);
+        int rsum = deepSearch(root->right, res);
+        res = max(res, max(lsum+rsum+root->val,root->val));//比较res，lsum+rsum+root->val和root->val中最大的
+        int temp = max(lsum, rsum);
+        //返回路径最大 root->val和 root->val+temp
+        if(root->val + temp > root->val){
+            return root->val+temp;
+        }
+        else{
+            return root->val;
+        }
+        
+    }
+};
