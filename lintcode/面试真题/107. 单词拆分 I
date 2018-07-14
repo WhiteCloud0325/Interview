@@ -1,0 +1,46 @@
+描述
+给出一个字符串s和一个词典，判断字符串s是否可以被空格切分成一个或多个出现在字典中的单词。
+样例
+给出
+
+s = "lintcode"
+
+dict = ["lint","code"]
+
+返回 true 因为"lintcode"可以被空格切分成"lint code
+
+Answer:动态规划 dp[i]表示substr（0，i-1）符合, dp[i]=dp[j] && dict.count(s.substr(j,i-j))
+class Solution {
+public:
+    /*
+     * @param s: A string
+     * @param dict: A dictionary of words dict
+     * @return: A boolean
+     */
+    bool wordBreak(string &s, unordered_set<string> &dict) {
+        // write your code here
+        int flag[256] = {0};
+        for(string str: dict){
+            for(char c: str){
+                flag[c]++;
+            }
+        }
+        for(char c: s){
+            if(flag[c] == 0){
+                return false;
+            }
+        }
+        int n = s.size();
+        vector<bool> dp(n+1, false) ;
+        dp[0] = true;
+        for(int i =1; i<= n; ++i){
+            for(int j =i-1; j>=0; --j){
+                if(dp[j] && dict.count(s.substr(j,i-j))){
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[n];
+    }
+};
