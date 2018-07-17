@@ -1,0 +1,60 @@
+描述
+假设你是一个专业的窃贼，准备沿着一条街打劫房屋。每个房子都存放着特定金额的钱。你面临的唯一约束条件是：相邻的房子装着相互联系的防盗系统，且 当相邻的两个房子同一天被打劫时，该系统会自动报警。
+
+给定一个非负整数列表，表示每个房子中存放的钱， 算一算，如果今晚去打劫，你最多可以得到多少钱 在不触动报警装置的情况下。
+
+样例
+给定 [3, 8, 4], 返回 8.
+挑战
+O(n) 时间复杂度 且 O(1) 存储。
+
+Answer:dp[i]表示到第i个房子时最大钱数，flag[i]表示最大钱数时第i个房子是否被选中。
+        dp[i]和flag[i]状态dp[i-1],flag[i-1],dp[i-2],flag[i-2]有关
+        if(flag[i-1]){
+            if(dp[i-2] + A[i-1] > dp[i-1]){
+                dp[i] = dp[i-2] + A[i-1];
+                flag[i] = true;
+            }
+            else{
+                dp[i] = dp[i-1];
+                flag[i]  = false;
+            }
+        }
+        else{
+            flag[i] = true;
+            dp[i] = dp[i-1] + A[i-1];
+        }
+  为了由于只与上两个状态有关，所以dp[2],flag[2]，空间复杂度O(1)
+  c为当前状态i， dp[c^1]为i-1状态，在计算i之前，dp[c]为i-2状态
+class Solution {
+public:
+    /**
+     * @param A: An array of non-negative integers
+     * @return: The maximum amount of money you can rob tonight
+     */
+    long long houseRobber(vector<int> &A) {
+        // write your code here
+        int n = A.size();
+        long long dp[2] = {0};
+        bool flag[2] = {false};
+        int c = 0;
+        for(int i =1; i <= n; ++i){
+            c = c ^ 1;
+            if(flag[c ^ 1]){
+                if(dp[c] + A[i-1] > dp[c^1]){
+                    dp[c] = dp[c] + A[i-1];
+                    flag[c] = true;
+                }
+                else{
+                    dp[c] = dp[c^1];
+                    flag[c] = false;
+                }
+            }
+            else{
+                flag[c] = true;
+                dp[c] = dp[c^1] + A[i-1];
+            }
+        }
+        return dp[c];
+    }
+};
