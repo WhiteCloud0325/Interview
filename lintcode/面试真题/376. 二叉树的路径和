@@ -1,0 +1,47 @@
+描述
+给定一个二叉树，找出所有路径中各节点相加总和等于给定 目标值 的路径。
+
+一个有效的路径，指的是从根节点到叶节点的路径。
+样例
+给定一个二叉树，和 目标值 = 5:
+
+     1
+    / \
+   2   4
+  / \
+ 2   3
+返回：
+
+[
+  [1, 2, 2],
+  [1, 4]
+]
+
+Answer:深搜
+    vector<vector<int>> binaryTreePathSum(TreeNode * root, int target) {
+        // write your code here
+        vector<vector<int> > res;
+        vector<int> cur;
+        int sum = 0;
+        dfs(root, cur, res, sum, target);
+        return res;
+    }
+    void dfs(TreeNode *root, vector<int> &cur, vector<vector<int>> &res, int &sum, const int &target) {
+        if(root == NULL){
+            return;
+        }
+        sum += root->val;
+        cur.push_back(root->val);
+        if(root->left == NULL && root->right == NULL && sum == target ){
+            res.push_back(cur);
+        }
+        if(root->left){
+            dfs(root->left, cur, res, sum, target);
+        }
+        if(root->right){
+            dfs(root->right, cur, res, sum, target);
+        }
+        cur.pop_back();
+        sum -= root->val;
+        return;
+    }
