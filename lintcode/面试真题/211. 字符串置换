@@ -1,0 +1,27 @@
+描述
+给定两个字符串，请设计一个方法来判定其中一个字符串是否为另一个字符串的置换。
+
+置换的意思是，通过改变顺序可以使得两个字符串相等。
+样例
+"abc" 为 "cba" 的置换。
+
+"aabc" 不是 "abcc" 的置换。
+
+Answer: hash table 方法， 时间复杂度O(n),空间复杂度O(256)
+    bool Permutation(string &A, string &B) {
+        // write your code here
+        if(A.size() != B.size()){
+            return false;
+        }
+        int flag[256] = {0};
+        for(auto ch: A){
+            flag[ch]++;
+        }
+        for(auto ch: B){
+            flag[ch]--;
+            if(flag[ch] < 0){
+                return false;
+            }
+        }
+        return true;
+    }
