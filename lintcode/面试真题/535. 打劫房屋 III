@@ -39,9 +39,7 @@ public:
         dfs(root->left, cur_true_sum_left, cur_false_sum_left);
         dfs(root->right, cur_true_sum_right, cur_false_sum_right);
         cur_true_sum = cur_false_sum_left + cur_false_sum_right + root->val;
-        int temp1 = max(cur_true_sum_left + cur_true_sum_right, cur_false_sum_left + cur_false_sum_right);
-        int temp2 = max(cur_true_sum_left + cur_false_sum_right, cur_false_sum_left + cur_true_sum_right);
-        cur_false_sum = max(temp1, temp2);
+        cur_false_sum = max(cur_true_sum_left, cur_false_sum_left) + max(cur_true_sum_right, cur_false_sum_right);
         
         return;
     }
