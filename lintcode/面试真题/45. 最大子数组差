@@ -1,0 +1,86 @@
+描述
+给定一个整数数组，找出两个不重叠的子数组A和B，使两个子数组和的差的绝对值|SUM(A) - SUM(B)|最大。
+
+返回这个最大的差值。
+
+样例
+给出数组[1, 2, -3, 1]，返回 6
+挑战
+时间复杂度为O(n)，空间复杂度为O(n)
+
+Answer1:结合最大子数组和最小子数组问题，求前向最大子数组和最小子数组，反向最大子数组和最小子数组，
+然后i 从 1 到 n-1 遍历， 最大差值是1到i最大子数组 - i+1到n最小子数组 ，与 i+1 到n最大子数组与1到i最小子数组差值比较
+
+int maxDiffSubArrays(vector<int> &nums) {
+    // write your code here
+    int n = nums.size();
+    vector<int> up_max(n, 0);
+    vector<int> down_max(n, 0);
+    vector<int> up_min(n, 0);
+    vector<int> down_min(n, 0);
+    up_max[0] = up_min[0] = nums[0];
+    int max1 = nums[0], max2, min1 = nums[0], min2;
+    for(int i = 1; i < n; ++i){
+        max2 = max(max1 + nums[i], nums[i]);
+        up_max[i] = max(up_max[i-1], max2);
+        max1 = max2;
+
+        min2 = min(min1 + nums[i], nums[i]);
+        up_min[i] = min(up_min[i-1], min2);
+        min1 = min2;
+    }
+    down_max[0] = down_min[0] = nums[n-1];
+    min1 = max1 = nums[n-1];
+    for(int i = 1; i < n; ++i){
+        max2 = max(max1 + nums[n - 1 - i], nums[n - 1 - i]);
+        down_max[i] = max(down_max[i - 1], max2);
+        max1 = max2;
+
+        min2 = min(min1 + nums[n - 1 - i], nums[n - 1 - i]);
+        down_min[i] = min(down_min[i - 1], min2);
+        min1 = min2;
+    }
+    int res = INT_MIN;
+    for(int i = 0; i < n-1; ++i){
+        int temp = max(up_max[i] - down_min[n -2 - i], down_max[n - 2 -i] - up_min[i]);
+        res = max(res, temp);
+    }
+    return res;
+ }
+ Answer2:把Answer求最大子数组和最小子数组两个合并在一起
+    int maxDiffSubArrays(vector<int> &nums) {
+        // write your code here
+        int n = nums.size();
+        vector<int> up_max(n, 0);
+        vector<int> down_max(n, 0);
+        vector<int> up_min(n, 0);
+        vector<int> down_min(n, 0);
+        up_max[0] = up_min[0] = nums[0];
+        down_max[0] = down_min[0] = nums[n-1];
+        int max1 = nums[0], max2, min1 = nums[0], min2;
+        int max3 = nums[n-1], max4, min3 = nums[n-1], min4;
+        for(int i = 1; i < n; ++i){
+            max2 = max(max1 + nums[i], nums[i]);
+            up_max[i] = max(up_max[i-1], max2);
+            max1 = max2;
+            
+            min2 = min(min1 + nums[i], nums[i]);
+            up_min[i] = min(up_min[i-1], min2);
+            min1 = min2;
+            
+            max4 = max(max3 + nums[n - 1 - i], nums[n - 1 - i]);
+            down_max[i] = max(down_max[i - 1], max4);
+            max3 = max4;
+            
+            min4 = min(min3 + nums[n - 1 - i], nums[n - 1 - i]);
+            down_min[i] = min(down_min[i - 1], min4);
+            min3 = min4;
+        }
+        int res = INT_MIN;
+        for(int i = 0; i < n-1; ++i){
+            int temp = max(up_max[i] - down_min[n -2 - i], down_max[n - 2 -i] - up_min[i]);
+            res = max(res, temp);
+        }
+        return res;
+    }
+ 
