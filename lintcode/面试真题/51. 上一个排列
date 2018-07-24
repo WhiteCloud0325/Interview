@@ -1,0 +1,34 @@
+描述
+给定一个整数数组来表示排列，找出其上一个排列。
+样例
+给出排列[1,3,2,3]，其上一个排列是[1,2,3,3]
+
+给出排列[1,2,3,4]，其上一个排列是[4,3,2,1]
+
+Answer:数组从后往前遍历， 找nums[i] < nums[i-1]的分界点， 然后数组从后到i遍历， 找到nums[j] < nums[i-1],
+       swap(nums[j], nums[i-1]),然后从i到最后翻转数组。
+vector<int> previousPermuation(vector<int> &nums) {
+    // write your code here
+    int n = nums.size();
+    if(n <= 1){
+        return nums;
+    }
+    int i;
+    for(i = n - 1; i > 0; --i){
+        if(nums[i] < nums[i-1]){
+            break;
+        }
+    }
+    if( i == 0){
+        reverse(nums.begin(), nums.end());
+        return nums;
+    }
+    for(int j = n-1; j >=i; --j){
+        if( nums[j] < nums[i-1]){
+            swap(nums[i-1], nums[j]);
+            break;
+        }
+    }
+    reverse(nums.begin() + i, nums.end());
+    return nums;
+}
