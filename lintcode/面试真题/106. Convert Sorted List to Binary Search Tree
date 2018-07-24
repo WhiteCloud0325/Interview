@@ -1,0 +1,40 @@
+描述
+给出一个所有元素以升序排序的单链表，将它转换成一棵高度平衡的二分查找树
+样例
+               2
+1->2->3  =>   / \
+             1   3
+
+Answer:
+class Solution {
+public:
+    /*
+     * @param head: The first node of linked list.
+     * @return: a tree node
+     */
+    TreeNode * sortedListToBST(ListNode * head) {
+        // write your code here
+        int len = 0;
+        ListNode* cur = head;
+        while(cur){
+            ++len;
+            cur = cur->next;
+        }
+        return helper(head, 1, len);
+    }
+    
+    TreeNode * helper(ListNode* &head, int start, int end) {
+        if (start > end) {
+            return NULL;
+        }
+        int mid = start + (end - start) / 2;
+        TreeNode * left_node = helper(head, start, mid - 1);
+        TreeNode * cur = new TreeNode(head->val);
+        head = head->next;
+        TreeNode * right_node = helper(head, mid + 1, end);
+        cur->left = left_node;
+        cur->right = right_node;
+        return cur;
+    }
+    
+};
