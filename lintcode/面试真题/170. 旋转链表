@@ -1,0 +1,48 @@
+描述
+给定一个链表，旋转链表，使得每个节点向右移动k个位置，其中k是一个非负数
+
+样例
+给出链表1->2->3->4->5->null和k=2
+
+返回4->5->1->2->3->null
+Answer:
+ListNode * rotateRight(ListNode * head, int k) {
+    // write your code here
+    if (head == NULL) {
+       return head; 
+    }
+    int len = 1;
+    ListNode * cur = head;
+    while (cur->next) {
+        ++len;
+        cur = cur->next;
+    }
+    cur->next = head;
+    k = k % len;
+    int num = 0;
+    cur = head;
+    for (cur = head; num < len; cur = cur->next) {
+        ListNode * node1 = cur;
+        ListNode * node2 = node1;
+        int tempval = node1 ->val;
+        do {
+            int i = 0;
+            while(i < k) {
+                node2 = node2->next;
+                ++i;
+            }
+           int temp = node2->val;
+      node2->val = tempval;
+      tempval = temp;
+      node1 = node2;
+            ++num;
+        } while(node1 != cur && num < len);
+    }
+    cur = head;
+    for(int i = 1; i < len; ++i){
+        cur = cur->next;
+    }
+    cur->next = NULL;
+    return head;
+
+}
