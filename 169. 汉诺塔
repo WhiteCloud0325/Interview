@@ -1,0 +1,30 @@
+描述
+汉诺塔问题（又称为河内塔问题），是一个大家熟知的问题。在A，B，C三根柱子上，有n个不同大小的圆盘（假设半径分别为1-n吧），一开始他们都叠在我A上（如图所示），你的目标是在最少的合法移动步数内将所有盘子从A塔移动到C塔。
+游戏中的每一步规则如下：
+
+每一步只允许移动一个盘子（从一根柱子最上方到另一个柱子的最上方）
+移动的过程中，你必须保证大的盘子不能在小的盘子上方（小的可以放在大的上面，最大盘子下面不能有任何其他大小的盘子)
+图示：
+
+hanoi
+样例
+给出n = 3
+
+返回["from A to C","from A to B","from C to B","from A to C","from B to A","from B to C","from A to C"]
+Answer:
+vector<string> towerOfHanoi(int n) {
+    // write your code here
+    vector<string> res;
+    helper(n, 'A', 'B', 'C', res);
+    return
+}
+void helper(int n, char start, char mid, char target, vector<string> &res) {
+    if(n == 0){
+        return;
+    }
+    helper(n-1, start, target, mid, res);
+    char str[12];
+    sprintf(str, "from %c to %c", start, target);
+    res.push_back(str);
+    helper(n-1, mid, start, target, res);
+}
