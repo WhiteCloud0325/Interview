@@ -1,0 +1,35 @@
+描述
+假设你有一个数组，它的第i个元素是一支给定的股票在第i天的价格。设计一个算法来找到最大的利润。
+你最多可以完成两笔交易。
+
+样例
+给出一个样例数组 [4,4,6,1,1,4,2,5], 返回 6
+
+Answer1:一次O(n)遍历,找到 i， 0到i的最大利润和i到 n-1的最大利润,
+      再O(n)遍历，在i的最大利润是0到i最大利润和i+1的最大利润和
+        
+int maxProfit(vector<int> &prices) {
+    // write your code here
+    int n = prices.size();
+    if (n <= 1) {
+        return 0;
+    }
+    vector<vector<int>> profit(2, vector<int>(n,0));
+    profit[0][0] = 0;
+    profit[1][0] = 0;
+    int min_price = prices[0];
+    int max_price = prices[n-1];
+    for (int i = 1; i < n; ++i) {
+        profit[0][i] = max(profit[0][i-1], prices[i] - min_price);
+        min_price = min(min_price, prices[i]);
+
+        profit[1][i] = max(profit[1][i-1], max_price - prices[n - 1 - i]);
+        max_price = max(max_price, prices[n - 1 - i]);
+    }
+    int res = 0;
+    for (int i = 0; i <= n - 1; ++i) {
+        res = max(res, profit[0][i] + profit[1][n - 1 - i]);
+    }
+    return res;
+}
+
