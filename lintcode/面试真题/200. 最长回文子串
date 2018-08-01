@@ -1,0 +1,53 @@
+描述
+给出一个字符串（假设长度最长为1000），求出它的最长回文子串，你可以假定只有一个满足条件的最长回文串。
+样例
+给出字符串 "abcdzdcab"，它的最长回文子串为 "cdzdc"。
+挑战
+O(n2) 时间复杂度的算法是可以接受的，如果你能用 O(n) 的算法那自然更好。
+
+Answer1: 动态规划，将s翻转为t，作为最长公共字符串，超时
+string longestPalindrome(string &s) {
+    // write your code here
+    string t = s;
+    reverse(t.begin(), t.end());
+    int n = s.size();
+    vector<vector<int>> dp(n + 1, vector<int> (n + 1, 0));
+    int len = 0, end = 0;
+    for (int i = 1; i <= n; ++i) {
+        for(int j = 1; j <= n; ++j) {
+            if ( t[j - 1] == s[i - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                if(dp[i][j] > len) {
+                    len = dp[i][j];
+                    end = i - 1; 
+                }
+            }
+            else {
+                dp[i][j] = 0;
+            }
+        }
+    }
+    return s.substr(end - len + 1,len);
+}
+Answer2:动态规划
+string longestPalindrome(string &s) {
+    // write your code here
+    if(s.empty()) {
+        return s;
+    }
+    int n = s.size();
+    vector<vector<bool>> dp(n, vector<bool>(n, false));
+    int end = 0, len = 0;
+    for (int i = 0; i < n; ++i) {
+        for (int j = i; j >= 0; --j) {
+            if (s[j] == s[i] && ( i - j <= 2 || dp[j + 1][i - 1] )) {
+                dp[j][i] = true;
+                if (len < i - j + 1) {
+                    end = i;
+                    len = i - j + 1;
+                }
+            }
+        }
+    }
+    return s.substr(end + 1 - len ,len);
+}
