@@ -1,0 +1,143 @@
+描述
+给出一个由小写字母组成的矩阵和一个字典。找出所有同时在字典和矩阵中出现的单词。
+一个单词可以从矩阵中的任意位置开始，可以向左/右/上/下四个相邻方向移动。一个字母在一个单词中只能被使用一次。
+样例
+给出矩阵：
+doaf
+agai
+dcan
+和字典：
+{"dog", "dad", "dgdg", "can", "again"}
+
+返回 {"dog", "dad", "can", "again"}
+
+
+dog:
+doaf
+agai
+dcan
+dad:
+doaf
+agai
+dcan
+can:
+doaf
+agai
+dcan
+again:
+doaf
+agai
+dcan
+挑战
+使用单词查找树来实现你的算法
+
+Answer: 首先根据words建立字典树，然后遍历board中的每一个字符来找到入口处第一个树节点，回溯查找，注意查找到单词时要讲is_tail赋值false，避免二次查找
+class Solution {
+public:
+    class TrieNode{
+    public:
+        TrieNode():is_tail_(false){};
+    public:
+        bool is_tail_;
+        map<char, TrieNode*> next_;
+    };
+    class TrieTree{
+    public:
+        TrieTree(){
+            root = new TrieNode();
+        }
+        void insert(string & word) {
+            TrieNode * cur = root;
+            for(int i = 0; i < word.size(); ++i) {
+                if (cur->next_[word[i]] == NULL) {
+                    cur->next_[word[i]] = new TrieNode();
+                }
+                cur = cur->next_[word[i]];
+            }
+            cur->is_tail_ = true;
+        }
+    public:
+        TrieNode* root;
+        
+    };
+    /**
+     * @param board: A list of lists of character
+     * @param words: A list of string
+     * @return: A list of string
+     */
+    vector<string> wordSearchII(vector<vector<char>> &board, vector<string> &words) {
+        // write your code here
+        TrieTree trietree;
+        for (int i = 0; i < words.size(); ++i) {
+            trietree.insert(words[i]);
+        }
+        int m = board.size(), n = board[0].size();
+        flag = vector<vector<bool>>(m, vector<bool>(n, false));
+        string str;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if(trietree.root->next_[board[i][j]] != NULL) {
+                    str.push_back(board[i][j]); 
+                    flag[i][j] = true;//查找到入口第一个字符，要flag赋为true
+                    backTrace(trietree.root->next_[board[i][j]], i, j, board, str);
+                    str.pop_back();
+                    flag[i][j] = false;
+                }
+            }
+        }
+        return res;
+        
+    }
+    
+    void backTrace(TrieNode* cur, int row, int col, vector<vector<char>> &board, string &str) {
+        if (cur->is_tail_ == true) {
+           res.push_back(str);
+           cur->is_tail_ = false;//查找到单词将is_tail_赋为false，避免二次查找
+        }
+        if(cur->next_.empty()) {
+            return;
+        }
+        if ((row - 1) >=0 && !flag[row - 1][col]) {
+            if (cur->next_[board[row - 1][col]] != NULL) {
+                flag[row - 1][col] = true;
+                str.push_back(board[row - 1][col]);
+                backTrace(cur->next_[board[row - 1][col]], row - 1, col, board, str);
+                flag[row - 1][col] = false;
+                str.pop_back();
+            }
+        }
+        
+        if ( col - 1 >=0 && !flag[row][col - 1]) {
+            if (cur->next_[board[row][col - 1]] != NULL) {
+                flag[row][col - 1] = true;
+                str.push_back(board[row][col - 1]);
+                backTrace(cur->next_[board[row][col - 1]], row, col - 1, board, str);
+                str.pop_back();
+                flag[row][col - 1] = false;
+            }
+        }
+        
+        if (row + 1 < board.size() && !flag[row + 1][col]) {
+            if (cur->next_[board[row + 1][col]] != NULL) {
+                flag[row + 1][col] = true;
+                str.push_back(board[row + 1][col]);
+                backTrace(cur->next_[board[row + 1][col]], row + 1, col, board, str);
+                str.pop_back();
+                flag[row + 1][col] = false;
+            }
+        }
+        
+        if (col + 1 < board[0].size() && !flag[row][col + 1]) {
+            if (cur->next_[board[row][col + 1]] != NULL) {
+                flag[row][col + 1] = true;
+                str.push_back(board[row][col + 1]);
+                backTrace(cur->next_[board[row][col + 1]], row, col + 1, board, str);
+                str.pop_back();
+                flag[row][col + 1] = false;
+            } 
+        }
+    }
+public:
+    vector<vector<bool>> flag;
+    vector<string> res;
+};
