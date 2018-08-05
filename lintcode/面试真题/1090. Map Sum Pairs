@@ -1,0 +1,80 @@
+描述
+Implement a MapSum class with insert, and sum methods.
+
+For the method insert, you'll be given a pair of (string, integer). 
+The string represents the key and the integer represents the value. If the key already existed, then the original key-value pair will be overridden to the new one.
+
+For the method sum, you'll be given a string representing the prefix, and you need to return the sum of all the pairs' value 
+whose key starts with the prefix.
+样例
+Input: insert("apple", 3), Output: Null
+Input: sum("ap"), Output: 3
+Input: insert("app", 2), Output: Null
+Input: sum("ap"), Output: 5
+
+
+Answer:字典树，插入和查询
+class MapSum {
+public:
+    /** Initialize your data structure here. */
+    class TrieNode{
+    public:
+        TrieNode():is_tail_(false), value_(0){}
+    public:
+        bool is_tail_;
+        int value_;
+        map<char, TrieNode*> next_;
+    };
+    
+    MapSum() {
+        root = new TrieNode();
+    }
+    
+    ~MapSum() {
+        delete root;
+    }
+    
+    void insert(string key, int val) {
+        TrieNode * cur = root;
+        for (int i = 0; i < key.size(); ++i) {
+            if (cur->next_[key[i]] == NULL) {
+               cur->next_[key[i]] = new TrieNode(); 
+            }
+            cur = cur->next_[key[i]];
+        }
+        cur->is_tail_ = true;
+        cur->value_ = val;
+    }
+    
+    int sum(string prefix) {
+        int res = 0;
+        TrieNode* cur = root;
+        for (int i = 0; i < prefix.size(); ++i) {
+            if (cur->next_[prefix[i]] == NULL) {
+                return res;
+            }
+            cur = cur->next_[prefix[i]];
+        }
+        res = sum(cur);
+        return res;
+    }
+    
+    int sum(TrieNode *cur) {
+        if (cur == NULL) {
+            return 0;
+        }
+        int res = 0;
+        if (cur->is_tail_) {
+            res += cur->value_;
+        }
+        if (cur->next_.empty()) {
+           return res; 
+        }
+        for (auto it = cur->next_.begin(); it != cur->next_.end(); ++it) {
+            res += sum(it->second);
+        }
+        return res;
+    } 
+public:
+    TrieNode* root;
+};
