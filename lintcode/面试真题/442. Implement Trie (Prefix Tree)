@@ -1,0 +1,83 @@
+描述
+实现一个 Trie，包含 insert, search, 和 startsWith 这三个方法。
+你可以假设所有的输入都是小写字母a-z。
+样例
+insert("lintcode")
+search("code") // return false
+startsWith("lint") // return true
+startsWith("linterror") // return false
+insert("linterror")
+search("lintcode) // return true
+startsWith("linterror") // return true
+
+Answer: Trie；把一个空的root哨兵节点作为根节点
+class Trie {
+public:
+    class TrieNode{
+    public:
+        TrieNode():is_tail_(false){}
+    public:
+        bool is_tail_;
+        map<char, TrieNode*> next_;
+    };
+
+    Trie() {
+        // do intialization if necessary
+        root = new TrieNode();
+    }
+
+    /*
+     * @param word: a word
+     * @return: nothing
+     */
+    void insert(string &word) {
+        // write your code here
+        TrieNode* cur = root;
+        for (int i = 0; i < word.size(); ++i) {
+            if(cur->next_[word[i]] == NULL) {
+                cur->next_[word[i]] = new TrieNode();
+            }
+            cur = cur->next_[word[i]];
+        }
+        cur->is_tail_ = true;
+    }
+
+    /*
+     * @param word: A string
+     * @return: if the word is in the trie.
+     */
+    bool search(string &word) {
+        // write your code here
+        TrieNode* cur = root;
+        for (int i = 0; i < word.size(); ++i) {
+            if (cur->next_[word[i]] == NULL) {
+               return false; 
+            }
+            cur = cur->next_[word[i]];
+        }
+        if (cur->is_tail_) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /*
+     * @param prefix: A string
+     * @return: if there is any word in the trie that starts with the given prefix.
+     */
+    bool startsWith(string &prefix) {
+        // write your code here
+        TrieNode* cur = root;
+        for (int i = 0; i < prefix.size(); ++i) {
+            if (cur->next_[prefix[i]] == NULL) {
+                return false;
+            }
+            cur = cur->next_[prefix[i]];
+        }
+        return true;
+    }
+public:
+    TrieNode* root;
+};
