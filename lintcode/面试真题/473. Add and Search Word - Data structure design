@@ -1,0 +1,86 @@
+描述
+设计一个包含下面两个操作的数据结构：addWord(word), search(word)
+
+addWord(word)会在数据结构中添加一个单词。而search(word)则支持普通的单词查询或是只包含.和a-z的简易正则表达式的查询。
+
+一个 . 可以代表一个任何的字母。
+你可以假设所有的单词都只包含小写字母 a-z。
+样例
+addWord("bad")
+addWord("dad")
+addWord("mad")
+search("pad")  // return false
+search("bad")  // return true
+search(".ad")  // return true
+search("b..")  // return true
+
+Answer：
+class WordDictionary {
+public:
+    class TrieNode{
+    public:
+        TrieNode():is_tail_(false){}
+    public:
+        bool is_tail_;
+        map<char, TrieNode*> next_;
+    };
+public:
+    WordDictionary(){
+        root = new TrieNode();
+    }
+    /*
+     * @param word: Adds a word into the data structure.
+     * @return: nothing
+     */
+    void addWord(string &word) {
+        // write your code here
+        TrieNode* cur = root;
+        for (int i = 0; i < word.size(); ++i) {
+            if (cur->next_[word[i]] == NULL) {
+               cur->next_[word[i]] = new TrieNode(); 
+            }
+            cur = cur->next_[word[i]];
+        }
+        cur->is_tail_ = true;
+    }
+
+    /*
+     * @param word: A word could contain the dot character '.' to represent any one letter.
+     * @return: if the word is in the data structure.
+     */
+    bool search(string &word) {
+        // write your code here
+        return search(word, 0, root);
+    }
+    bool search(string &word, int i, TrieNode* cur) {
+        if(cur == NULL) {    //查询的单词比字典树大的情况
+            return false;
+        }
+        if (i == word.size()) { //查询到前缀word，但要比较这是否是一个单词
+            if (cur->is_tail_){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        if (word[i] == '.') {
+           for(auto it = cur->next_.begin(); it != cur->next_.end(); ++it) {
+               if(search(word, i + 1, it->second)) {
+                   return true;
+               }
+           }
+           return false;
+        }
+        else {
+            if (cur->next_[word[i]] == NULL) {
+               return false; 
+            }
+            else{
+                return search(word, i + 1, cur->next_[word[i]]);
+            }
+        }
+    }
+public:
+    TrieNode* root;
+};
