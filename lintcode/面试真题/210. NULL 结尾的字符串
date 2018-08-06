@@ -1,0 +1,25 @@
+描述
+用 C 或 C++ 设计一个 void reverse (char* str) 功能，实现把一个以 NULL 结尾字符串翻转的功能。
+在字符串 "abcd" 中包含了4个字符以及字符串末尾的 NULL。
+
+样例
+str=abcd 返回 dcba
+
+Answer：
+void reverse(char *str) {
+    // Write your code here
+    int len = 0;
+    char *cur = str;
+    while (*cur) {
+        ++len;
+        ++cur;
+    }
+    int i = 0;
+    while (i < len / 2) {
+        char temp = *(str + i);
+        *(str + i) = *(str + len - 1 - i);
+        *(str + len - 1 - i) = temp;
+        ++i;
+    }
+
+}
