@@ -1,0 +1,32 @@
+描述
+一个小孩爬一个 n 层台阶的楼梯。他可以每次跳 1 步， 2 步 或者 3 步。
+实现一个方法来统计总共有多少种不同的方式爬到最顶层的台阶。
+样例
+n = 3
+1 + 1 + 1 = 2 + 1 = 1 + 2 = 3 = 3
+
+返回 4.
+Answer:
+int climbStairs2(int n) {
+    // write your code here
+    if (n == 0) {
+        return 1;
+    }
+    if (n == 1) {
+        return 1;
+    }
+    if (n == 2) {
+        return 2;
+    }
+    if (n == 3) {
+        return 4;
+    }
+    int res = 0, last1 = 1, last2 = 2, last3 = 4 ;
+    for (int i = 3; i < n; ++i) {
+        res = last1 + last2 + last3;
+        last1 = last2;
+        last2 = last3;
+        last3 = res;
+    }
+    return res;
+}
