@@ -1,0 +1,62 @@
+描述
+请设计一种方法将一个栈进行升序排列 （最大的数在最上面）。
+
+你可以使用另外一个栈来辅助操作，但不可将这些数复制到另外一个数据结构中 （如，数组）。
+O(n^2) time is acceptable.
+
+样例
+给一个栈：
+
+| |
+|3|
+|1|
+|2|
+|4|
+ -
+排序之后：
+
+| |
+|4|
+|3|
+|2|
+|1|
+ -
+栈会被序列化为[4,2,1,3]，也就是说最右边是栈顶。
+void stackSorting(stack<int> &st1) {
+    // write your code here
+    stack<int> st2;
+    int n = st1.size();
+    for(int i = 0; i < n / 2; ++i) {
+        int min_num = st1.top();
+        st1.pop();
+        while (st1.size() != i){
+            if (st1.top() < min_num) {
+                st2.push(min_num);
+                min_num = st1.top();
+            }
+            else {
+                st2.push(st1.top());
+            }
+            st1.pop();
+        }
+        st1.push(min_num);
+
+        int max_num = st2.top();
+        st2.pop();
+        while( st2.size() != i) {
+            if (st2.top() > max_num) {
+                st1.push(max_num);
+                max_num = st2.top();
+            }
+            else {
+                st1.push(st2.top());
+            }
+            st2.pop();
+        }
+        st2.push(max_num);
+    }
+    while (!st2.empty()) {
+        st1.push(st2.top());
+        st2.pop();
+    }
+}
