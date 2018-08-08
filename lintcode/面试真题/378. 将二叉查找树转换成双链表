@@ -1,0 +1,67 @@
+描述
+将一个二叉查找树按照中序遍历转换成双向链表。
+
+样例
+给定一个二叉查找树：
+
+    4
+   / \
+  2   5
+ / \
+1   3		
+返回 1<->2<->3<->4<->5。
+Answer:
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ * Definition of Doubly-ListNode
+ * class DoublyListNode {
+ * public:
+ *     int val;
+ *     DoublyListNode *next, *prev;
+ *     DoublyListNode(int val) {
+ *         this->val = val;
+           this->prev = this->next = NULL;
+ *     }
+ * }
+ */
+
+
+class Solution {
+public:
+    /*
+     * @param root: The root of tree
+     * @return: the head of doubly list node
+     */
+    DoublyListNode * bstToDoublyList(TreeNode * root) {
+        // write your code here
+        DoublyListNode* head = NULL, *last = NULL;
+        helper(root, last, head);
+        return head;
+    }
+    
+    void helper(TreeNode* root, DoublyListNode* &last, DoublyListNode* &head) {
+        if (root == NULL) {
+            return;
+        }
+        helper(root->left, last, head);
+        DoublyListNode* cur = new DoublyListNode(root->val);
+        if(last == NULL) {
+            head = cur;
+        }
+        else {
+            last->next = cur;    
+        }
+        cur->prev = last;
+        last = cur;
+        helper(root->right, last, head);
+    }
+};
