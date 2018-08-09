@@ -1,0 +1,26 @@
+描述
+给定 n 个非负整数 a1, a2, ..., an, 每个数代表了坐标中的一个点 (i, ai)。画 n 条垂直线，使得 i 垂直线的两个端点分别为(i, ai)和(i, 0)。找到两条线，使得其与 x 轴共同构成一个容器，以容纳最多水。
+容器不可倾斜。
+样例
+给出[1,3,2], 最大的储水面积是2.
+
+Answer:双指针
+int maxArea(vector<int> &heights) {
+    // write your code here
+    int n = heights.size();
+    if (n <= 1) {
+        return 0;
+    }
+    int i = 0, j = n - 1;
+    int res = 0;
+    while (i < j) {
+        res = max(res, (j - i) * min(heights[i], heights[j]));
+        if(heights[i] < heights[j]) {
+            ++i;
+        }
+        else {
+            --j;
+        }
+    }
+    return res;
+}
