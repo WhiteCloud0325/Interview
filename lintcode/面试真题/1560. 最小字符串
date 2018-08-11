@@ -1,0 +1,70 @@
+描述
+Given a string s of lowercase letters of length n, remove the k characters from it and we will get a new string of length n-k. Please output the new string with the smallest lexicographic order.
+
+The lexicographical order in this problem: Firstly compare the length of two strings, the lexicographical order of the smaller length is smaller. If the length is the same, then comparison is started from the left side of the string to find the first different character, and the corresponding character smaller is the smaller lexicographical order string.
+
+For example: "abbz" and "abza"
+Firstly two strings are the same length, then compare bit by bit from the left:
+The first bit is "a", then continue to compare the next one
+The second bit is "b", then continue to compare the next one
+For third bit, the first string is "b", and the second string is "z". Because "b" < "z", the lexicographic order of the first string is smaller.
+样例
+给定s="abccc",k=2,返回 "abc"
+
+解释：
+删除4号位和5号位的`c`
+给定 s="bacdb",k=2,返回"acb"
+
+解释：
+删除1号位的`b`和4号位的`d`
+给定s="cba",k=2,返回"a"
+
+解释：
+删除1号位的`c`和2号位的`b`
+
+Answer:
+string MinimumString(string &s, int k) {
+    // Write your code here
+    int len = s.size();
+    string res;
+    int n = len - k;
+    int start = 0;
+    for (int i = n; i >= 1; --i) {
+        int pos = start;
+        for (int j = start; j <= len - i; ++j) {
+            if (s[j] < s[pos]) {
+                pos = j;
+            }
+        }
+        res.push_back(s[pos]);
+        start = pos + 1;
+    }
+    return res;
+}
+Answer:2按删除个数遍历 ，更快一点
+string MinimumString(string &s, int k) {
+    // Write your code here
+    string res;
+    int start = 0, pos = 0;
+    while(k > 0) {
+        if(s.size() - start == k) {
+            return res;
+        }
+        pos = start;
+        for(int i = start; i <= start + k; ++i) {
+            if(s[i] == 'a') {
+                pos = i;
+                break;
+            }
+            if (s[i] < s[pos]) {
+                pos = i;
+            } 
+        }
+        res.push_back(s[pos]);
+        k -= pos - start;
+        start = pos + 1;
+
+    }
+    res.append(s.substr(start, s.size() - start));
+    return res;
+}
