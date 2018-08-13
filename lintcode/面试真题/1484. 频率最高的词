@@ -1,0 +1,105 @@
+描述
+给出一个字符串s，表示小说的内容，再给出一个list表示这些单词不参加统计，求字符串中出现频率最高的单词(如果有多个，返回字典序最小的那个)
+样例
+Input: s = "Jimmy has an apple, it is on the table, he like it"
+excludeWords = ["a","an","the"]
+Output:"it"
+Answer:hash， 字典树
+class Solution {
+public:
+    /**
+     * @param s: a string
+     * @param excludewords: a dict
+     * @return: the most frequent word
+     */
+    class TrieNode{
+    public:
+        TrieNode():is_tail_(false), is_count_(true),count(0){}
+    public:
+        bool is_tail_;
+        bool is_count_;
+        int count;
+        map<char, TrieNode*> next_;
+    };
+    
+    class TrieTree{
+    public:
+        TrieTree(){
+            root_ = new TrieNode();
+        }
+        
+        void insert(const string &word, bool is_count) {
+            TrieNode* cur = root_;
+            for (int i = 0; i < word.size(); ++i) {
+                auto it = cur->next_.find(word[i]);
+                if (it == cur->next_.end()) {
+                    cur->next_[word[i]] = new TrieNode();
+                }
+                cur = cur->next_[word[i]];
+            }
+            cur->is_tail_ = true;
+            cur->is_count_ = is_count;
+            cur->count++;
+            return;
+        } 
+    public:
+        TrieNode* root_;
+    };
+    string frequentWord(string &s, unordered_set<string> &excludewords) {
+        // Write your code here
+        TrieTree tree;
+        for (auto it = excludewords.begin(); it != excludewords.end(); ++it) {
+            tree.insert(*it, false);
+        }
+        if (s.empty()) {
+            return "";
+        }
+        int start = 0;
+        string res;
+        string temp;
+        int max_count = 0;
+        TrieNode* cur = tree.root_;
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] == ' ' || s[i] == ',') {
+                if(cur == tree.root_) {
+                    continue;
+                }
+                if(cur->is_count_) {
+                    cur->count++;
+                    cur->is_tail_ = true;
+                    if (max_count < cur->count) {
+                        res = temp;
+                        max_count = cur->count;
+                    }
+                    else if (max_count == cur->count){
+                        res = res < temp? res : temp;
+                    }
+                }
+                temp.clear();
+                cur = tree.root_;
+            }
+            else{
+                temp.push_back(s[i]);
+                auto it = cur->next_.find(s[i]);
+                if (it == cur->next_.end()) {
+                    cur->next_[s[i]] = new TrieNode;
+                }
+                cur = cur->next_[s[i]];
+            }
+        }
+        if (cur != tree.root_) {
+            if(cur->is_count_) {
+                cur->count++;
+                cur->is_tail_ = true;
+                if (max_count < cur->count) {
+                    res = temp;
+                    max_count = cur->count;
+                }
+                else if (max_count == cur->count){
+                    res = res < temp? res : temp;
+                }
+            }
+        }
+        return res;
+    }
+};
