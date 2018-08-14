@@ -1,0 +1,33 @@
+描述
+给你一个只由字母'A'和'B'组成的字符串s，找一个最长的子串，要求这个子串里面'A'和'B'的数目相等，输出该子串的长度。
+这个子串可以为空。
+s的长度n满足 2<=n<=1000000。
+样例
+给定s="ABAAABBBA"，返回8。
+
+解释：
+子串 s[0,7] 和子串 s[1,8] 满足条件，长度为 8。
+给定s="AAAAAA"，返回0。
+
+解释：
+s 中除了空字串，不存在 'A' 和 'B' 数目相等的子串。
+Answer:
+int getAns(string &S) {
+    int res = 0;
+    int n = S.size();
+    if(n==0) return 0;
+    vector<int> records(2*n+1, -1);
+    int cnt = 0;
+    for(int i = 0; i < S.size(); ++i) {
+        cnt += (S[i]=='A'?1:-1);
+        if(cnt == 0) res = std::max(res, i+1);
+        else {
+            if(records[cnt+n] != -1) {
+                res = std::max(res, i-records[cnt+n]);
+            }
+            else
+                records[cnt+n] = i;
+        }
+    }
+    return res;
+}
