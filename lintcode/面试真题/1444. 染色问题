@@ -1,0 +1,44 @@
+描述
+有一个圆形，分成n个扇形，用m种颜色给每个扇形染色，相邻扇形颜色不能相同。求方案总数。
+不考虑对称性。
+由于这个数可能很大，因此只需返回方案数模1e9 + 7。
+1 \leq n \leq 10^51≤n≤10
+​5
+​​ 
+1 \leq m \leq 10^51≤m≤10
+​5
+​​ 
+样例
+给定n = 2，m = 3，返回6。
+
+解释：
+一个圆划分为 2 个扇形，用 3 种颜色上色方案有“黑红，黑白，白红，白黑，红白，红黑”6 种。
+给定 n = 3，m = 2，返回 0。
+
+解释：
+一个圆划分为 3 个扇形，用 2 种颜色上色，无论怎么上色，都没法保证相邻的颜色不同。
+
+Answer:动态规划并注意越界问题，dp1[i]表示扇形总数为i时颜色总数表明最后一面与i-1面和第一面都不相同，
+dp2[i]表明扇形总数是i时，最后一面和第一面颜色相同的总数
+状态方程：dp1[i] = dp1[i - 1] * (m - 2) +dp2[i - 1] * (m - 1)
+         dp2[i] = dp1[i - 1]
+注意越界问题，对于两个int型整数相乘时要先强制转换防止越界
+int getCount(int n, int m) {
+    // Write your code here
+    const int mod = 1e9 + 7;
+    if (n == 1) {
+        return m;
+    }
+    if (n == 2) {
+        return (long long)m * (long long)(m - 1) % mod ;
+    }
+    long long dp1 = (long long)m * (long long)(m - 1) % mod , dp2 = 0;
+    for (int i = 3; i <=n; ++i) {
+        long long temp2 = dp1;
+        long long temp1 = (dp1 * (m - 2) % mod + dp2 * (m - 1) % mod) % mod;
+        dp1 = temp1;
+        dp2 = temp2;
+    }
+    return dp1;
+
+}
