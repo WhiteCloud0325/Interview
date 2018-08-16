@@ -1,0 +1,26 @@
+描述
+给两个字符串 S 和 T, 判断 S 能不能通过删除一些字母(包括0个)变成 T.
+样例
+input:
+S = "lintcode"
+T = "lint"
+output:
+true
+
+Answer:
+bool canConvert(string &s, string &t) {
+    // Write your code here
+    if (s.size() < t.size()) {
+        return false;
+    }
+    int j = 0;
+    for (int i = 0; i < s.size() && j < t.size(); ++i) {
+        if (s.size() - i  <= t.size() - j  && s[i] != t[j]) {
+            return false;
+        }
+        if (s[i] == t[j]) {
+            ++j;
+        }
+    }
+    return true;
+}
