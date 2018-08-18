@@ -1,0 +1,64 @@
+描述
+每个人都有自己的网上好友。现在有n个人，给出m对好友关系，寻问任意一个人是否能直接或者间接的联系到所有网上的人。若能，返回yes，若不能，返回no，好友关系用a数组和b数组表示，代表a[i]和b[i]是一对好友。
+1 \leq n \leq 50001≤n≤5000
+1 \leq m \leq 100001≤m≤10000
+A person may be friends with himself
+样例
+Given n=4, a=[1,1,1], b=[2,3,4],return yes.
+
+1 and 2, 3, 4 can be directly contacted
+2, 3, 4 and 1 can be directly contacted, these 3 people can be indirectly contacted by 1
+Given n=5, a=[1,2,4], b=[2,3,5], return no.
+
+1,2,3 can be connected to each other
+4,5 can communicate with each other
+However, the two groups cannot be contacted. For example, 1 cannot contact 4 or 5
+Answer:并查集
+class Solution {
+public:
+    /**
+     * @param n: the person sum
+     * @param a: the array a
+     * @param b: the array b
+     * @return: yes or no
+     */
+    
+    string socialNetwork(int n, vector<int> &a, vector<int> &b) {
+        // Write your code here
+        vector<int> ufs(n, -1);// 负数表示集合大小， 整数表示根节点位置
+        for (int i = 0; i < a.size(); ++i) {
+            int x = a[i] - 1;
+            int y = b[i] - 1;
+            int rx = ufs_find(ufs, x);
+            int ry = ufs_find(ufs, y);
+            ufs_union(ufs, rx, ry);
+        }
+        int num = 0;
+        for(int i = 0; i < n; ++i) {
+            if (ufs[i] < 0){
+                ++num;
+            }
+        }
+        if (num == 1) {
+            return "yes";
+        }
+        else {
+            return "no";
+        }
+    }
+    int ufs_find(vector<int> &ufs, int x) {
+        if (ufs[x] < 0) return x;
+        return ufs_find(ufs, ufs[x]);
+    }
+    int ufs_union(vector<int> &ufs, int x, int y) {
+        int rx = ufs_find(ufs, x);
+        int ry = ufs_find(ufs, y);
+        if (rx == ry) {
+            return -1;
+        }
+        ufs[rx] += ufs[ry];
+        ufs[ry] = rx;
+    }
+
+    
+};
