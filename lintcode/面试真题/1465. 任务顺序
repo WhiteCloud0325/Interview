@@ -1,0 +1,74 @@
+描述
+有 n 种不同的任务，执行时间为 t[]，成功概率为 p[]。当有一个任务完成，或者所有任务都失败的情况下，行动结束。以不同的顺序执行任务，期望停止行动的时间一般是不同的。请你求出以何种顺序执行任务才能使期望行动结束时间最短？如果两种任务顺序的期望行动结束时间相同，返回字典序最小的任务顺序。
+1 \leq n \leq 50, 1 \leq t_i \leq 10, 0 \leq p_i \leq 11≤n≤50,1≤t
+​i
+​​ ≤10,0≤p
+​i
+​​ ≤1
+nn为正整数，t_it
+​i
+​​ 为正整数，p_ip
+​i
+​​ 为浮点数
+样例
+Given n=1, t=[1], p=[1.0], return [1].
+
+
+Explanation:
+The shortest expected action end time is 1.0*1+(1.0-1.0)*1=1.0
+
+Given n=2, t=[1,2], p=[0.3, 0.7], return [2,1].
+
+
+Explanation:
+The shortest expected action end time is 0.7*2+(1.0-0.7)*0.3*(2+1)+(1.0-0.7)*(1.0-0.3)*(2+1)=2.3
+
+Answer:
+class Solution {
+public:
+    /**
+     * @param n: The number of tasks
+     * @param t: The time array t
+     * @param p: The probability array p
+     * @return: Return the order
+     */
+    struct Event{
+        Event(){}
+        Event(int pos_, int cost_, double prob_):pos(pos_),cost(cost_), prob(prob_){}
+        int pos;
+        int cost;
+        double prob;
+    };
+    struct comp_less{
+        const double EPS = 1e-6;
+        bool operator()(Event &lhs, Event &rhs){
+            double cost1 = lhs.cost * lhs.prob + (lhs.cost + rhs.cost) * (1 - lhs.prob) * rhs.prob;
+            double cost2 = rhs.cost * rhs.prob + (lhs.cost + rhs.cost) * (1 - rhs.prob) * lhs.prob;
+            if (fabs(cost1 - cost2) < EPS){ //浮点数等于比较，这里要用绝对值和EPS才精确
+			    return lhs.pos < rhs.pos;
+            }
+            else if (cost1 < cost2 ) {
+            	return true;
+            }
+            else {
+            	return false;
+		    }
+        }
+    };
+    vector<int> getOrder(int n, vector<int> &t, vector<double> &p) {
+        // Write your code here
+        //概率相同，将时间小的放前面
+        //时间相同，将概率概率大的放前面
+        vector<Event> events;
+        for (int i = 0; i < n; ++i) {
+            events.emplace_back(i + 1, t[i], p[i]);
+        }
+        sort(events.begin(), events.end(), comp_less());
+        vector<int> res;
+        for (int i = 0; i < n; ++i) {
+            res.push_back(events[i].pos);
+        }
+        return res;
+        
+    }
+};
