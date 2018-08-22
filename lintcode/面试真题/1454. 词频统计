@@ -1,0 +1,120 @@
+描述
+输入一个字符串s和一个字符串列表excludeList，求s中不存在于excludeList中的所有的最高频词。你的结果将会被判题程序按字典序排序。
+单词不区分大小写，最后返回小写单词
+字符串中非字母的字符都认为是空格，空格是单词的分隔符
+所有单词的长度和不超过 10^510
+​5
+​​ ，单词长度不超过 100100
+
+样例
+给出 s="I love Amazon."，excludeList=[]，返回 ["i","love","amazon"]。
+
+解释：
+"i"，"love"，"amazon" 是出现次数最多的单词。
+给出 s="Do not trouble trouble."，excludeList=["do"]，返回 ["trouble"]。
+
+解释：
+"trouble" 是出现次数最多的单词。
+
+Answer:字典树
+class Solution {
+public:
+    /**
+     * @param s: The string s
+     * @param excludeList: The excludeList
+     * @return: Return the most frequent words
+    */
+    class TrieNode{
+    public:
+    	TrieNode(){
+    		count = 0;
+    		memset(next, 0, 26 * sizeof(TreeNode*));
+    	}
+    public:
+    	TrieNode * next[26];
+    	int count;
+    };
+    class TrieTree{
+    public:
+    	TrieTree(){
+    		root = new TrieNode();
+    		max_num = 0;
+    	}
+    	void InsertExclude(const string &str) {
+    		TrieNode* cur = root;
+    		for (int i = 0; i < str.size(); ++i) {
+    			char ch = str[i];
+    			if (ch >= 'A' && ch <= 'Z') {
+    				ch += 32;
+    			}
+    			if (cur->next[ch - 'a'] == NULL) {
+    				cur->next[ch - 'a'] = new TrieNode();
+    			}
+    			cur = cur->next[ch - 'a'];
+    		}
+    		cur->count = -1;
+    	}
+    	void Insert(const string &str) {
+    		TrieNode* cur = root;
+    		for (int i = 0; i < str.size(); ++i) {
+    			char ch = str[i];
+    			if (ch >= 'A' && ch <= 'Z') {
+    				ch += 32;
+    			}
+    			if (cur->next[ch - 'a'] == NULL) {
+    				cur->next[ch - 'a'] = new TrieNode();
+    			}
+    			cur = cur->next[ch - 'a'];
+    		}
+    
+    		if (cur->count >= 0) {
+    			cur->count++;
+    			max_num = max(max_num, cur->count);
+    		}
+    	}
+    	void Get(TrieNode*cur, string &str, vector<string> &res) {
+    		if (cur == NULL) {
+    			return;
+    		}
+    		if (cur->count == max_num) {
+    			res.push_back(str);
+    		}
+    		for (int i = 0; i < 26; ++i) {
+    			if (cur->next[i]){
+    				str.push_back('a' + i);
+    				Get(cur->next[i], str, res);
+    				str.pop_back();
+    			}
+    		}
+    	}
+    public:
+    	TrieNode* root;
+    	int max_num;
+    };
+    
+    vector<string> getWords(string &s, vector<string> &excludeList) {
+    	// Write your code here
+    	int pos = 0;
+    	vector<string> res;
+    	string str;
+    	TrieTree tree;
+    	for (int i = 0; i < excludeList.size(); ++i) {
+    		tree.InsertExclude(excludeList[i]);
+    	}
+    	for (int i = 0; i < s.size(); ++i) {
+    		if (!((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))) {
+    			if (i > pos) {             //排除非字母，并且非字母连续情况
+    				str = s.substr(pos, i - pos);
+    				tree.Insert(str);
+    			}
+    			pos = i + 1;
+    		}
+    	}
+    	if (pos < s.size()) {
+    		str = s.substr(pos, s.size() - pos);
+    	}
+    	str.clear();
+    	tree.Get(tree.root, str, res);
+    	return res;
+    }
+};
