@@ -1,0 +1,25 @@
+描述
+给出一个字符串 s，找出所有的不同的长度为 k 的它的子串，并将结果按照字典序排序
+
+样例
+Input: s = "caaab"
+k = 2
+Output:["aa","ab","ca"]
+
+Answer1: 使用set
+vector<string> uniqueSubstring(string &s, int k) {
+    // Write your code here
+    vector<string> res;
+    if (k > s.size()) {
+        return res;
+    }
+    set<string> st;
+    for(int i = 0; i <= s.size() - k; ++i) {
+        st.insert(s.substr(i, k));
+    }
+
+    for (auto str: st) {
+        res.push_back(str);
+    }
+    return res;
+}
