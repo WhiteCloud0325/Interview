@@ -1,0 +1,38 @@
+描述
+给定一系列的描述函数进入和退出的时间，问每个函数的运行时间是多长。
+函数字符串长度不超过1010，描述个数不超过1000010000，时刻不超过1e91e9
+所有的描述按照时间顺序，并且保证输入正确，每个函数先进入再退出
+按照函数名字典序升序输出
+样例
+给出 s=["F1 Enter 10","F2 Enter 18","F2 Exit 19","F1 Exit 20"]，返回["F1|10","F2|1"].
+
+解释：
+F1从10时刻进入，20时刻退出，运行时长为10，F2从18时刻进入，19时刻退出，运行时长为1.
+给出 s=["F1 Enter 10","F1 Exit 18","F1 Enter 19","F1 Exit 20"]，返回["F1|9"].
+
+解释：
+F1从10时刻进入，18时刻退出后又从19时刻进入，20时刻退出，总共运行时长为9.
+
+Answer:因为按字典序排序使用map
+vector<string> getRuntime(vector<string> &a) {
+    // Write your code here
+    map<string, int> table;
+    vector<string> res;
+    for (int i = 0; i < a.size(); ++i) {
+        int pos1 = a[i].find(' ');
+        string key = a[i].substr(0, pos1);
+        int pos2 = a[i].find(' ', pos1 + 1);
+        int value = stoi(a[i].substr(pos2 + 1, a[i].size() - pos2 - 1));
+        if (table.find(key) ==table.end()) {
+            table[key] = value;
+        }
+        else{
+            table[key] = value - table[key];
+        }
+
+    }
+    for (auto it = table.begin(); it != table.end(); ++it) {
+        res.push_back(it->first + "|" + to_string(it->second));
+    }
+    return res;
+}
