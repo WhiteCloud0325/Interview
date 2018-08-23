@@ -41,3 +41,44 @@ string convert(string &s, int numRows) {
     }
     return res;
 }
+
+Answer2： 使用map, key为行号，value为字符串， z字形遍历数组，相应行存到map里
+string convert(string &s, int numRows) {
+	// Write your code here
+	if (numRows < 2) {
+		return s;
+	}
+
+	map<int, string> dic;
+	int current = 0;
+	bool downward = true;
+	for (int i = 0; i < s.size(); ++i) {
+		if (dic.find(current) != dic.end()) {
+			dic[current] += s[i];
+		}
+		else {
+			dic[current] = s[i];
+		}
+
+		if (current == numRows - 1) {
+			downward = false;
+		}
+		else if (current == 0) {
+			downward = true;
+		}
+
+		if (downward) {
+			current++;
+		}
+		else {
+			current--;
+		}
+	}
+
+	string result = "";
+	for (map<int, string>::iterator itr = dic.begin(); itr != dic.end(); ++itr) {
+		result.append(itr->second);
+	}
+
+	return result;
+}
