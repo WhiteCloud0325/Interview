@@ -1,0 +1,41 @@
+描述
+输入两个字符串 s 和 t，判断 s 能否在删除一些字符后得到 t。
+1 \leq |s|, |t| \leq 10^51≤∣s∣,∣t∣≤10
+​5
+​​ 
+字符串只包含小写字母
+
+样例
+给出 s="abc"，t="c"，返回 True。
+
+解释：
+s 删除 'a' 和 'b' 可以得到 t。
+给出 s="a"，t="c"，返回 False。
+
+解释：
+s 无法在删除一些字符后得到 t。
+
+Answer:题意其实就是判断t是否是s的子序列， 使用双指针方法
+bool canGetString(string &s, string &t) {
+    // Write your code here
+    if (s.size() < t.size()) {
+        return false;
+    }
+    int i1 = 0, j1 = s.size() - 1,  i2 = 0, j2 = t.size() - 1;
+    while (i1 <= j1 && i2 <=j2) {
+        if (s[i1] == t[i2]) {
+            i2++;
+        }
+        ++i1;
+        if (s[j1] == t[j2]) {
+            --j2;
+        }
+        --j1;
+    }
+    if (i2 > j2) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
