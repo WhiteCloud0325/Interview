@@ -1,0 +1,39 @@
+描述
+我们正常的单词不会有连续两个以上相同的字母，如果出现连续三个或以上的字母，那么这是一个抽搐词。现在给一个单词，从左至右求出所有抽搐字母的起始点和结束点。
+输入的字符串长度为n，n <= 100000。
+样例
+给出 str = "whaaaaatttsup", 返回 [[2,6],[7,9]]。
+
+解释：
+"aaaa"和"ttt"是抽搐字母，输出他们的起始点和结束点。
+给出 str = "whooooisssbesssst", 返回 [[2,5],[7,9],[12,15]]。
+
+解释：
+"ooo"和"sss"和"ssss"都是抽搐字母，输出他们的起始点和结束点。
+Answer: 连续三个以上， 后面与开始的第一个相同的个数大于等于2， 注意字符串尾部的特殊情况
+vector<vector<int>> twitchWords(string &str) {
+    // Write your code here
+    int n = str.size();
+    vector<vector<int>> res;
+    int start = 0;
+    int count = 0;
+    for (int i = 1; i < n; ++i) {
+        if (str[i] == str[start]) {
+            ++count;
+        }
+        else {
+            if(count >=2 ) {
+                vector<int> temp = {start, i - 1};
+                res.push_back(temp);
+            }
+            count = 0;
+            start = i;
+        }
+    }
+    if (count >= 2) {
+        vector<int> temp = {start, n - 1};
+        res.push_back(temp);
+    }
+
+    return res;
+}
