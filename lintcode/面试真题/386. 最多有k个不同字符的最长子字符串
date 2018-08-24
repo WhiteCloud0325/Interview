@@ -1,0 +1,41 @@
+描述
+给定一个字符串，找到最多有k个不同字符的最长子字符串。
+样例
+例如，给定 s = "eceba" , k = 3,
+
+T 是 "eceb"，长度为 4.
+挑战
+O(n), n 是所给字符串的长度
+
+Answer:滑动窗口算法
+int lengthOfLongestSubstringKDistinct(string &s, int k) {
+    // write your code here
+    if (k == 0) {
+        return 0;
+    }
+    if (s.size() <= k) {
+        return s.size();
+    }
+    int table[256] = {0};
+    int count = 0;
+    int start = 0 ,end = 0;
+    int max_len = 0;
+    for (; end < s.size(); ++ end) {
+        if (table[s[end]] == 0 && count == k) {
+            max_len = max(max_len, end - start);
+            while (count == k) {
+                table[s[start]]--;
+                if (table[s[start]] == 0) {
+                    --count;
+                }
+                ++start;
+            }
+        }
+        if (table[s[end]] == 0) { //只有table[s[end]]不曾出现的字符才使得count+1
+            ++count;
+        }
+        table[s[end]]++;
+    }
+    max_len = max(max_len, end - start); // 注意最后还要比较一次
+    return max_len;
+}
