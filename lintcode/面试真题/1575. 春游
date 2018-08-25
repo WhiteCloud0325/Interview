@@ -1,0 +1,55 @@
+描述
+有n组小朋友准备去春游，数组a表示每一组的人数，保证每一组不超过四个人，现在有若干辆车，每辆车最多只能坐四个人，同一组的小朋友必须坐在同一辆车上，同时每辆车可以不坐满。问最少需要多少辆车能够满足小朋友们的出行需求。
+0 \leq n \leq 1e40≤n≤1e4
+1 \leq a[i] \leq 41≤a[i]≤4
+
+样例
+给出 a = [1,2,3,4] , 返回 3。
+
+解释：
+此时第四组有4个人，单独坐一辆车，
+第一组有1个人，第三组有3个人，刚好4人拼一辆车，
+第二组2个人单独一辆车，故最少需要3辆车
+给出 a = [1,2,2,2],返回 2。
+
+解释：
+第一组和第二组拼一辆车
+第三组和第四组拼一辆车
+故最少需要两辆车
+
+int getAnswer(vector<int> &a) {
+    // Write your code here
+    int table[4] = {0};
+    for (auto i : a) {
+        table[i-1]++;
+    }
+    int res = 0;
+    res += table[3];
+    if (table[2] <= table[0]) {
+        table[0] -= table[2];
+    }
+    else {
+        table[0] = 0;
+    }
+    res += table[2];
+    res += table[1] / 2;
+    table[1] = table[1] % 2;
+    if (table[1] == 1) {
+        if (table[0] <=2) {
+            table[0] = 0;
+        }
+        else {
+            table[0] -= 2;
+        }
+        ++res;
+    }
+    if (table[0] > 0) {
+        res += table[0] / 4;
+        if (table[0] % 4 != 0) { //注意不被4整除的情况
+            ++res;
+        }
+
+    }
+
+    return res;
+}
