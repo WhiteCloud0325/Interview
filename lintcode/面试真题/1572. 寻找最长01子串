@@ -1,0 +1,31 @@
+描述
+  现在有1个01串str，你的任务是寻找到最长的01连续子串，0和1交替出现，例如010，10101，01。然而，这对优秀的lintcode的学员来说，有些过于简单了。
+  那么现在，你可以进行一些操作，使得01连续子串尽可能的长。操作是指，你可以选择一个位置，将字符串断开，变成两个字符串，然后每个字符串翻转，
+最后按照原来的顺序拼接在一起。你可以进行0次或多次这样的操作，返回你最终能够获得的最大01连续子串的长度。
+样例
+Give str="100010010" and return 5.
+
+You can split 10|0010010 , and after flipping on both sides, it becomes 01|0100100.
+That is, 010100100, select position 1 to position 5, 01010, and the length is 5.
+Give str="1001" and return 2.
+
+No matter how you split the flip, it won't make the answer bigger. So 10 is the largest 01 consecutive substring and returns 2.
+
+Answer:
+int askingForTheLongest01Substring(string &str) {
+    // Write your code here
+    string  s = str + str;
+    int count = 1;
+    int res = 0;
+    for (int i = 1; i < s.size(); ++i) {
+        if (s[i] != s[i -1]) {
+            ++count;
+        }
+        else {
+            res = max(res, count);
+            count = 1;
+        }
+    }
+    res = max(res, count);
+    return min(res, (int)str.size());
+}
