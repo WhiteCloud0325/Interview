@@ -1,0 +1,38 @@
+描述
+给定一个只包含大写字母的字符串S, 在S中插入尽量少的字符'_'，使同一种字母间隔至少为k，如果有多种插入方式，则选择目标字符串字典序最小的方式。例如S=”AABACCDCD”,k = 3,则目标字符串为”A__AB_AC__CD_CD”。由于目标字符串长度可能很长,我们只需要返回原串每个位置前插入的'_'的个数即可，比如前面的例子返回[0,2,0,1,0,2,0,1,0]。
+（'_'的字典序是大于'Z'的）
+1<=`|S|`,`k`<=5000001<=‘∣S∣‘,‘k‘<=500000
+
+样例
+给定S="AABACCDCD",k=3,返回[0,2,0,1,0,2,0,1,0]
+
+解释：
+修改后的字符串为”A__AB_AC__CD_CD”
+给定S = "ABBA",k = 2, 返回[0,0,1,0]
+
+解释：
+修改后的字符串为”AB_BA”
+
+Answer: 因为有字典序的要求， 当前位置i，从i-1 到 i-k+1(或)开始遍历，类似贪婪算法
+vector<int> getAns(int k, string &S) {
+    // Write your code here.
+    int n = S.size();
+    vector<int> res(n, 0);
+    if (k == 0) {
+        return res;
+    }
+    for (int i = 0; i < n; ++i) {
+        int count = 0;
+        for (int j = i - 1; j >=0 && j > i - k; --j) {
+            ++count;
+            if (S[i] == S[j]) {
+                if (count < k) {
+                    res[i] = k - count;
+                }
+                break;
+            }
+            count += res[j];
+        }
+    }
+    return res;
+}
