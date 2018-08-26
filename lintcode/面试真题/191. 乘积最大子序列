@@ -1,0 +1,20 @@
+描述
+找出一个序列中乘积最大的连续子序列（至少包含一个数）。
+样例
+比如, 序列 [2,3,-2,4] 中乘积最大的子序列为 [2,3] ，其乘积为6。
+
+Answer: dp
+int maxProduct(vector<int> &nums) {
+    // write your code here
+    int res = INT_MIN;
+    int n = nums.size();
+    vector<int> dp_max(n, 0);
+    vector<int> dp_min(n, 0);
+    res = dp_max[0] = dp_min[0] = nums[0];
+    for (int i = 1; i < n; ++i) {
+        dp_max[i] = max(nums[i], max(dp_max[i - 1] * nums[i], dp_min[i - 1] * nums[i]));
+        dp_min[i] = min(nums[i], min(dp_max[i - 1] * nums[i], dp_min[i - 1] * nums[i]));
+        res = max(res, dp_max[i]);
+    }
+    return res;
+}
