@@ -1,0 +1,20 @@
+描述
+计算在一个 32 位的整数的二进制表示中有多少个 1.
+样例
+给定 32 (100000)，返回 1
+
+给定 5 (101)，返回 2
+
+给定 1023 (1111111111)，返回 10
+挑战
+If the integer is n bits with m 1 bits. Can you do it in O(m) time?
+Answer:
+int countOnes(int num) {
+    // write your code here
+    int res = 0;
+    while (num) {
+        ++res;
+        num = num & (num - 1);
+    }
+    return res;
+}
