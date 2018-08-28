@@ -1,0 +1,58 @@
+描述
+给定一个整数数组，在该数组中，寻找三个数，分别代表三角形三条边的长度，问，可以寻找到多少组这样的三个数来组成三角形？
+
+样例
+例如，给定数组 S = {3,4,6,7}，返回 3
+
+其中我们可以找到的三个三角形为：
+
+{3,4,6}
+{3,6,7}
+{4,6,7}
+给定数组 S = {4,4,4,4}, 返回 4
+
+其中我们可以找到的三个三角形为：
+
+{4(1),4(2),4(3)}
+{4(1),4(2),4(4)}
+{4(1),4(3),4(4)}
+{4(2),4(3),4(4)}
+
+Answer1:暴力解法
+int triangleCount(vector<int> &S) {
+    // write your code here
+    sort(S.begin(), S.end());
+    int res = 0;
+    int n = S.size();
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            for (int k = j + 1; k < n; ++k) {
+                if (S[i] + S[j] > S[k]){
+                    ++res;
+                }
+                else {
+                    break;
+                }
+            }
+        }
+    }
+    return res;
+}
+
+Answer2：双指针， 中间的j记录 位置，不必再从i + 1 开始重新循环
+int triangleCount(vector<int> &S) {
+    // write your code here
+    sort(S.begin(), S.end());
+    int res = 0;
+    int n = S.size();
+    for (int i = 0; i < n; ++i) {
+        int j = i + 1, k = j + 1;
+        for (; k < n; ++k) {
+            while(j < k && S[i] + S[j] <= S[k]) {
+                ++j;
+            }
+            res += k - j;
+        }
+    }
+    return res;
+}
