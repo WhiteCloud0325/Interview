@@ -1,0 +1,33 @@
+描述
+翻转链表中第m个节点到第n个节点的部分
+m，n满足1 ≤ m ≤ n ≤ 链表长度
+
+样例
+给出链表1->2->3->4->5->null， m = 2 和n = 4，返回1->4->3->2->5->null
+挑战
+在原地一次翻转完成
+
+Answer:
+ListNode * reverseBetween(ListNode * head, int m, int n) {
+    // write your code here
+    ListNode *preV=new ListNode(0);
+    preV->next=head;
+    ListNode* lastNode=preV,*curNode=head,*nextNode=NULL;
+    for(int i=1;i<m;i++){
+        lastNode=curNode;
+        curNode=curNode->next;
+    }
+    ListNode *swapPre=lastNode,*swapNext=curNode;
+
+    lastNode=curNode;
+    curNode=curNode->next;
+    for(int i=m;i<n;i++){
+        nextNode=curNode->next;
+        curNode->next=lastNode;
+        lastNode=curNode;
+        curNode=nextNode;
+    }
+    swapPre->next=lastNode;
+    swapNext->next=curNode;
+    return preV->next;
+}
