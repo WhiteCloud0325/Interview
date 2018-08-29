@@ -1,0 +1,31 @@
+描述
+给定一个链表，删除链表中倒数第n个节点，返回链表的头节点。
+
+样例
+给出链表1->2->3->4->5->null和 n = 2.
+
+删除倒数第二个节点之后，这个链表将变成1->2->3->5->null.
+挑战
+O(n)时间复杂度
+
+Answer:
+ListNode * removeNthFromEnd(ListNode * head, int n) {
+    // write your code here
+    ListNode *node =new ListNode(0);
+    ListNode *slow = node, *fast = head;
+    node->next = head;
+    int i=n;
+    while(i-->0){
+        fast = fast->next;
+    }
+    while(fast){
+        slow=slow->next;
+        fast=fast->next;
+    }
+    ListNode *temp = slow->next;
+    slow->next = temp->next;
+    delete temp;
+    head = node->next;
+    delete node;
+    return head;
+}
