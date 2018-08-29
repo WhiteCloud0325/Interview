@@ -31,3 +31,27 @@ ListNode * reverseBetween(ListNode * head, int m, int n) {
     swapNext->next=curNode;
     return preV->next;
 }
+
+Answer2:
+ListNode * reverseBetween(ListNode * head, int m, int n) {
+    // write your code here
+    ListNode* preHead = new ListNode(0);
+    preHead->next = head;
+    ListNode* pre = preHead;
+    for (int i = 1; i < m; ++i) {
+        pre = pre->next;
+    }
+    ListNode* last = pre->next;
+    ListNode* node1 = NULL, *cur = pre->next, *node2 = NULL;
+    for (int i = m; i <= n; ++i) {
+        node2 = cur->next;
+        cur->next = node1;
+        node1 = cur;
+        cur = node2;
+    }
+    pre->next = node1;
+    last->next = cur;
+    head = preHead->next;
+    delete preHead;
+    return head;
+}
