@@ -1,0 +1,50 @@
+描述
+给出一个链表，每个节点包含一个额外增加的随机指针可以指向链表中的任何节点或空的节点。
+
+返回一个深拷贝的链表。 
+挑战
+可否使用O(1)的空间
+
+Answer:
+RandomListNode *copyRandomList(RandomListNode *head) {
+    // write your code here
+    RandomListNode* current = head;
+
+    // make a copy of current node, and make the clone node as the next node of current node
+    // something like:
+    // current --> clone of current --> next of current
+    while (current) {
+        RandomListNode* next = current->next;
+        RandomListNode* clone = new RandomListNode(current->label);
+        current->next = clone;
+        clone->next = next;
+        current = next;
+    }
+
+    current = head;
+    while (current) {
+        if (current->random) {
+            current->next->random = current->random->next;   
+        }
+        current = current->next->next;
+    }
+
+    current = head;
+    RandomListNode* cloneHead = NULL;
+    RandomListNode* cloneTail = NULL;
+    while (current) {
+        RandomListNode* nextNext = current->next->next;
+        if (cloneTail) {
+            cloneTail->next = current->next;
+        } else {
+            cloneHead = current->next;
+        }
+        cloneTail = current->next;
+        cloneTail->next = NULL;
+
+        current->next = nextNext;
+        current = nextNext;
+    }
+
+    return cloneHead;
+}
