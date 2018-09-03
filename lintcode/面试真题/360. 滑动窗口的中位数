@@ -20,66 +20,70 @@
 挑战
 时间复杂度为 O(nlog(n))
 
-Answer:
+Answer:建两个堆，一个最大堆，一个最小堆
     vector<int> medianSlidingWindow(vector<int> &nums, int k) {
         // write your code here
-        if (k == 1 || nums.empty()) {
-            return nums;
-        }
-        vector<int> res;
+        multiset<int> left,right;
         int n = nums.size();
-        k = min(n, k);
-        vector<int> max_heap;
-        vector<int> min_heap(nums.begin(), nums.begin() + k);
-        make_heap(min_heap.begin(), min_heap.end(), greater<int>());
-        while (min_heap.size() > max_heap.size()) {
-            pop_heap(min_heap.begin(), min_heap.end(), greater<int>());
-            int temp = min_heap.back();
-            min_heap.pop_back();
-            max_heap.push_back(temp);
-            push_heap(max_heap.begin(), max_heap.end());
-        }
-        res.push_back(max_heap[0]);
-        for (int i = k; i < nums.size(); ++i) {
-            if (nums[i - k] <= max_heap[0]) {
-                for (auto it = max_heap.begin(); it != max_heap.end(); ++it){
-                    if (*it == nums[i - k]) {
-                        max_heap.erase(it);
-                        break;
-                    }
-                }
-            }
-            else {
-                for (auto it = min_heap.begin(); it != min_heap.end(); ++it) {
-                    if (*it == nums[i - k]) {
-                        min_heap.erase(it);
-                        break;
-                    }
-                }
-            }
-            if (max_heap.empty() || max_heap[0] < nums[i]) {
-                min_heap.push_back(nums[i]);
-                push_heap(min_heap.begin(), min_heap.end(), greater<int>());
-                while (min_heap.size() > max_heap.size()) {
-                    pop_heap(min_heap.begin(), min_heap.end(), greater<int>());
-                    int temp = min_heap.back();
-                    min_heap.pop_back();
-                    max_heap.push_back(temp);
-                    push_heap(max_heap.begin(), max_heap.end());
-                }
-            }
-            else {
-                max_heap.push_back(nums[i]);
-                push_heap(max_heap.begin(), max_heap.end());
-                while (max_heap.size() > min_heap.size() + 1) {
-                    pop_heap(max_heap.begin(), max_heap.end());
-                    int temp = max_heap.back();
-                    max_heap.pop_back();
-                    min_heap.push_back(temp);
-                    push_heap(min_heap.begin(), min_heap.end(), greater<int>());
-                }
-            }
-            res.push_back(max_heap[0]);
+        vector<int> res;
+        if(n == 0)
+            return res;
+
+        bool flag = true;
+        for(int i = 0 ; i < k ; i++)
+        {
+            //建立两个堆，左堆存放数组的前半部分，右堆存放后半部分
+            build(left,right,flag,nums[i]);
+
+        }    
+        res.push_back(*left.rbegin());
+        for(int i = k ; i < n ;i++)
+        {
+            //从堆中删除前一个数；
+            erasebuild(left,right,flag,nums[i-k]);
+            build(left,right,flag,nums[i]);
+            res.push_back(*left.rbegin());
+
         }
         return res;
+    }
+    void build(multiset<int> &left, multiset<int> &right, bool &flag, int number)
+    {
+        if(flag)
+        {
+            if(!right.empty() && *right.begin() < number)
+            {
+                right.insert(number);
+                number = *right.begin();
+                right.erase(right.find(number));
+            }
+            left.insert(number);
+
+        }
+        else
+        {
+            if( !left.empty() && *left.rbegin() > number)
+            {
+                left.insert(number);
+                number = *left.rbegin();
+                left.erase(left.find(number));
+            }
+            right.insert(number);
+        }
+        flag = !flag;
+    }
+    void erasebuild(multiset<int> &left, multiset<int> &right, bool &flag, int number)
+    {
+        if(left.find(number) != left.end())
+        {
+            left.erase(left.find(number));
+            //如果从左堆删除，则置flag为TRUE，反之为false；
+            flag = true;
+        }
+        else
+        {
+            right.erase(right.find(number));
+            flag = false;
+        }
+
     }
