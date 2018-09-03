@@ -1,0 +1,67 @@
+描述
+实现atoi这个函数，将一个字符串转换为整数。如果没有合法的整数，返回0。
+如果整数超出了32位整数的范围，返回INT_MAX(2147483647)如果是正整数，或者INT_MIN(-2147483648)如果是负整数。
+样例
+"10" =>10
+
+"-1" => -1
+
+"123123123123123" => 2147483647
+
+"1.0" => 1
+Answer:
+int atoi(string &str) {
+    // write your code here
+    if (str.empty()) {
+        return 0;
+    }
+    const int comp = 214748364;
+    bool flag = true; // true为正数, false为负数
+    bool over = false; //true为越界, false为正常
+    int pos = 0;
+    int res = 0;
+    while (pos < str.size()) { //从数字或+-开始
+        if ((str[pos] >='0' && str[pos] <= '9') || str[pos] == '-' || str[pos] == '+') {
+            break;
+        }
+        ++pos;
+    }
+    if (str[pos] == '-') {
+        flag = false;
+        ++pos;
+    }
+    else if (str[pos] == '+') {
+        ++pos;
+    }
+    int num = 0;
+
+    while (pos < str.size()) {
+        if (str[pos] < '0' || str[pos] > '9') {
+            break;
+        }   
+        ++num;
+        if (num >= 10) {
+            over = true;
+            break;
+        }
+        if (res == comp) {
+            if (str[pos] >= '8') {
+                over = true;
+                break;
+            }
+        }
+        res = res * 10 + str[pos++] - '0'; 
+    }
+    if (over) {
+        if (flag) {
+            return INT_MAX;
+        }
+        else {
+            return INT_MIN;
+        }
+    }
+    if (!flag) {
+        res = -res;
+    }
+    return res;
+}
