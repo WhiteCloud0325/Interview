@@ -1,0 +1,36 @@
+描述
+给定一个排序链表，删除所有重复的元素只留下原链表中没有重复的元素。
+样例
+给出 1->2->3->3->4->4->5->null，返回 1->2->5->null
+
+给出 1->1->1->2->3->null，返回 2->3->null
+
+Answer:
+ListNode * deleteDuplicates(ListNode * head) {
+    // write your code here
+    ListNode * root = new ListNode(0);
+    root->next = head;
+    ListNode *pre = root;
+    while(head){
+        bool flag =false;
+        while( head->next && head->next->val == head->val){
+            flag = true;
+            ListNode *temp = head->next;
+            head->next = temp->next;
+            delete temp;
+        }
+        if(flag){
+            pre->next = head->next;
+            delete head;
+            head = pre->next;
+        }
+        else{
+            pre = head;
+            head = head->next;
+        }
+    }
+
+    head = root->next;
+    delete root;
+    return head;
+}
