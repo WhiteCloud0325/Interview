@@ -34,3 +34,31 @@ ListNode * deleteDuplicates(ListNode * head) {
     delete root;
     return head;
 }
+
+Answer2:
+ListNode * deleteDuplicates(ListNode * head) {
+    // write your code here
+    if (head == NULL) {
+        return NULL;
+    }
+    ListNode* root = new ListNode(0);
+    root->next = head;
+    ListNode* cur = root;
+    while (cur->next) {
+        if (cur->next->next && cur->next->next->val == cur->next->val) {
+            int target = cur->next->val;
+            ListNode* node = cur->next;
+            while (node && node->val == target) {
+                cur->next = node->next;
+                delete node;
+                node = cur->next;
+            }
+        }
+        else {
+            cur = cur->next;
+        }
+    }
+    head = root->next;
+    delete root;
+    return head;
+}
