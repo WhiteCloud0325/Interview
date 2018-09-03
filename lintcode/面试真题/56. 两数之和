@@ -1,0 +1,31 @@
+描述
+给一个整数数组，找到两个数使得他们的和等于一个给定的数 target。
+
+你需要实现的函数twoSum需要返回这两个数的下标, 并且第一个下标小于第二个下标。注意这里下标的范围是 0 到 n-1。
+
+样例
+给出 numbers = [2, 7, 11, 15], target = 9, 返回 [0, 1].
+挑战
+Either of the following solutions are acceptable:
+
+O(n) Space, O(nlogn) Time
+O(n) Space, O(n) Time
+
+Answer:
+vector<int> twoSum(vector<int> &numbers, int target) {
+    // write your code here
+    unordered_map<int,int> num2pos;
+    vector<int> res;
+    for(int i=0;i<numbers.size();++i){
+        auto it=num2pos.find(numbers[i]);
+        if(it == num2pos.end()){
+            num2pos[target-numbers[i]]=i;
+        }
+        else{
+            res.push_back(it->second);
+            res.push_back(i);
+            return res;
+        }
+    }
+    return res;
+}
