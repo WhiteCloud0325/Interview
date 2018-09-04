@@ -87,3 +87,83 @@ Answer:建两个堆，一个最大堆，一个最小堆
         }
 
     }
+    
+ Answer2: 维护两个堆，最大堆和最小堆，使用multiset是为了删除元素是log(k)时间复杂度，而不是用vector<int>建堆
+ vector<int> medianSlidingWindow(vector<int> &nums, int k) {
+    // write your code here
+    if (k == 1 || nums.empty()) {
+        return nums;
+    }
+    int n = nums.size();
+    vector<int> res;
+    multiset<int> min_heap;
+    multiset<int, greater<int>> max_heap;
+    k = min(n, k);
+    for (int i = 0; i < k; ++i) {
+        if (max_heap.empty()) {
+            max_heap.insert(nums[i]);
+        }
+        else {
+            auto it = max_heap.begin();
+            if (*it >= nums[i]) {
+                max_heap.insert(nums[i]);
+            }
+            else {
+                min_heap.insert(nums[i]);
+            }
+        }
+        if (max_heap.size() > min_heap.size() + 1) {
+            auto it = max_heap.begin();
+            min_heap.insert(*it);
+            max_heap.erase(it);
+        }
+        else if (min_heap.size() > max_heap.size()) {
+            auto it = min_heap.begin();
+            max_heap.insert(*it);
+            min_heap.erase(it);
+        }
+
+    }
+    res.push_back(*(max_heap.begin()));
+    for (int i = k; i < nums.size(); ++i) {
+        auto it = max_heap.begin();
+        if (nums[i - k] <= *it) {
+            auto it2 = max_heap.find(nums[i - k]);
+            max_heap.erase(it2);
+        }
+        else {
+            auto it2 = min_heap.find(nums[i - k]);
+            min_heap.erase(it2);
+        }
+        if (max_heap.size() > min_heap.size() + 1) {
+            auto it2 = max_heap.begin();
+            min_heap.insert(*it2);
+            max_heap.erase(it2);
+        }
+        else if (min_heap.size() > max_heap.size()) {
+            auto it2 = min_heap.begin();
+            max_heap.insert(*it2);
+            min_heap.erase(it2);
+        }
+        it = max_heap.begin();
+        if (nums[i] <= *it) {
+            max_heap.insert(nums[i]);
+        }
+        else {
+            min_heap.insert(nums[i]);
+        }
+        if (max_heap.size() > min_heap.size() + 1) {
+            auto it2 = max_heap.begin();
+            min_heap.insert(*it2);
+            max_heap.erase(it2);
+        }
+        else if (min_heap.size() > max_heap.size()) {
+            auto it2 = min_heap.begin();
+            max_heap.insert(*it2);
+            min_heap.erase(it2);
+        }
+        it = max_heap.begin();
+        res.push_back(*it);
+    }                
+    return res;
+}
