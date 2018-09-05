@@ -71,3 +71,20 @@ public int singleNumber(int[] A) {
         }
         return x1;
     }
+例如 k=5, p = 1, 用x1,x2,x3来模拟五进制，由高位到低位为x3,x2,x1
+x3 ^= x2 & x1 & i;进行进位 
+x2 ^= x1 & i;
+x1 ^= i;
+当 为1 0 1时进行进位 x4 = x3 & ~x2 & x1相应为进行进位，x4= ~x4，x3 = x3& x4进行去除相应为1的。
+int singleNumber(vector<int> &nums) {
+    int x1 = 0, x2 = 0, x3 = 0, x4 = 0;
+    for (auto i : nums) {
+        x3 ^= x2 & x1 & i;
+        x2 ^= x1 & i;
+        x1 ^= i;
+        x4 = ~(x1 & ~x2 & x3);
+        x3 &= x4;
+        x1 &= x4;
+    }
+    return x1;
+}
