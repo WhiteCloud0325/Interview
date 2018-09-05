@@ -1,0 +1,29 @@
+描述
+给出2*n + 2个的数字，除其中两个数字之外其他每个数字均出现两次，找到这两个数字.
+样例
+给出 [1,2,2,3,4,4,5,3]，返回 1和5
+挑战
+O(n)时间复杂度，O(1)的额外空间复杂度
+
+Answer: 遍历一遍获得两个数的异或，找到某一位为1，这样讲数组分成两个部分
+vector<int> singleNumberIII(vector<int> &A) {
+    // write your code here
+    int num = 0;
+    for (auto i : A) {
+        num ^= i;
+    }
+    int flag = 1;
+    while ((flag & num) ==0) {
+        flag <<= 1;
+    }
+    vector<int> res(2, 0);
+    for (auto i : A) {
+        if (i & flag) {
+            res[0] ^= i;
+        }
+        else {
+            res[1] ^= i;
+        }
+    }
+    return res;
+}
