@@ -1,0 +1,39 @@
+描述
+给定两个字符串 s和t，每次可以任意交换s的奇数位或偶数位上的字符，即奇数位上的字符能与其他奇数位的字符互换，
+而偶数位上的字符能与其他偶数位的字符互换，问能否经过若干次交换，使s变成t。
+样例
+给出 s="abcd"，t="cdab"，返回"Yes"。
+
+解释：
+第一次a与c交换，第二次b与d交换。
+给出 s="abcd"，t="bcda"，返回"No"。
+
+解释：
+无论如何交换，都无法得到bcda。
+Answer: Hash Table
+string isTwin(string &s, string &t) {
+    // Write your code here
+    if (s.size() != t.size()) {
+        return "No";
+    }
+    int table[256] = {0};
+    for (int i = 0; i < s.size(); i += 2) {
+        table[s[i]]++;
+    }
+    for (int i = 0; i < t.size(); i += 2) {
+        table[t[i]]--;
+        if (table[t[i]] < 0) {
+            return "No";
+        }
+    }
+    for (int i = 1; i < s.size(); i += 2) {
+        table[s[i]]++;
+    }
+    for (int i = 1; i < t.size(); i += 2) {
+        table[t[i]]--;
+        if (table[t[i]] < 0) {
+            return "No";
+        }
+    }
+    return "Yes";
+}
