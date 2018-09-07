@@ -24,3 +24,16 @@ int maxProfit(vector<int> &prices) {
     res += sell - buy;
     return res;
 }
+
+Answer2:
+int maxProfit(vector<int> &prices) {
+    // write your code here
+    int res = 0, p = INT_MAX;
+    for (auto i : prices) {
+        if (i > p) {
+            res += i - p;
+        }
+        p = i;
+    }
+    return res;
+}
