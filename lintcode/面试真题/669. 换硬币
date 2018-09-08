@@ -42,4 +42,15 @@ int coinChange(vector<int> &coins, int amount) {
 }
 
 Answer2:
-
+    int coinChange(vector<int> &coins, int amount) {
+        // write your code here
+        int m = coins.size();
+        vector<int> dp(amount + 1,  INT_MAX - 1);
+        dp[0] = 0;
+        for (int i = 0; i < m; ++i) {
+            for (int j = coins[i]; j <= amount; ++j) {
+                dp[j] = min(dp[j], dp[j - coins[i]] + 1);
+            }
+        }
+        return dp[amount] <= amount? dp[amount] : -1;
+    }
