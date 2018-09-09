@@ -40,3 +40,17 @@ public:
     }
 };
 Answer2:在搜索nums[i]在dp的位置时使用二分法时间复杂度为O（nlogn）
+int longestIncreasingSubsequence(vector<int> &nums) {
+    // write your code here
+    vector<int> res;
+    for (auto i : nums) {
+        auto it = lower_bound(res.begin(), res.end(), i); // lower_bound函数logn时间负责度，找到对于给定的已经排好序的a，key最早能插入到那个位置
+        if (it == res.end()) {
+            res.push_back(i);
+        }
+        else {
+            *it = i;
+        }
+    }
+    return res.size();
+}
