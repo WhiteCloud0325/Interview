@@ -14,6 +14,9 @@ The array has at least 3 numbers in it.
 挑战
 Time complexity O(logN)
 
+
+测试用例：[5,4,3,2,1,0,10,9,8]
+
 Answer1:
 int findPeak(vector<int>& A) {
     // write your code here
