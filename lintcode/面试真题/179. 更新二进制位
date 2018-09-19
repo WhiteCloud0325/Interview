@@ -13,7 +13,7 @@ You can assume that the bits j through i have enough space to fit all of M. That
 挑战
 最少的操作次数是多少？
 
-Answer:
+Answer:对于int型变量左移和右移运算，左移和右移n，会先对n进行取模32，再进行移位运算
 int updateBits(int n, int m, int i, int j) {
     // write your code here
     int mask;
