@@ -1,0 +1,65 @@
+描述
+给定一个数将其转换为二进制（均用字符串表示），如果这个数的小数部分不能在 32 个字符之内来精确地表示，则返回 "ERROR"。
+样例
+n = "3.72", 返回 "ERROR".
+
+n = "3.5", 返回 "11.1".
+Answer:  不使用double来取整数和小数，因为double不精确， 整数和小数都用longlong 表示
+string binaryRepresentation(string &n) {
+    // write your code here
+    size_t pos = n.find('.');
+    long long a, b;
+    int len = 0;
+    if (pos == string::npos) {
+        a = stoll(n);
+        b = 0;
+    }
+    else {
+        len = n.size() - pos - 1;
+        a = stoll(n.substr(0, pos));
+        b = stoll(n.substr(pos + 1, len));
+        while (b && b % 10 == 0) {   // 去除小数最后的0， 并且因为stoll会把0.0625表示成625所以小数真正长度应该是0625
+            b /= 10;
+            --len;
+        }
+        if (b % 5 != 0) {
+            return "ERROR";
+        }
+    }
+    string s1, s2;
+    int count = len;
+    long long mod = 1;
+    while (count--) {
+        mod *= 10;
+    } 
+    count = 0;
+    while (count <32 && b != 0) {
+        b *= 2;
+        if (b / mod) {
+            b -= mod;
+            s2.push_back('1');
+        }
+        else {
+            s2.push_back('0');
+        }
+        ++count;
+    }
+    if (b != 0) {
+        return "ERROR";
+    }
+
+    while (a) {
+        s1.push_back('0' + a % 2);
+        a /= 2;
+    }
+    reverse(s1.begin(), s1.end());
+    if (s1.empty()) {
+        s1.push_back('0');
+    }
+    if (s2.empty()) {
+        return s1;
+    }
+    else {
+        return s1 + "." + s2;
+    }
+}
