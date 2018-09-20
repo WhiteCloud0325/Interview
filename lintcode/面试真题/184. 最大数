@@ -1,0 +1,63 @@
+描述
+给出一组非负整数，重新排列他们的顺序把他们组成一个最大的整数。
+
+最后的结果可能很大，所以我们返回一个字符串来代替这个整数。
+
+样例
+给出 [1, 20, 23, 4, 8]，返回组合最大的整数应为8423201。
+
+挑战
+在 O(nlogn) 的时间复杂度内完成。
+
+Answer: 实现比较仿函数，注意几点特殊例如23和232，，直到i==len1 && j == len2说明两个字符串相等(包含一个是另一个
+        循环子串)
+struct comp{
+    bool operator() (const string &lhs, const string &rhs){
+        int len1 = lhs.size(), len2 = rhs.size();
+        int i = 0, j = 0;
+        while (i < len1 || j < len2) {
+            if (j == len2) {
+                j = 0;
+            }
+            if (i == len1) {
+                i = 0;
+            }
+            if(lhs[i] > rhs[j]) {
+                return true;
+            }
+            else if (lhs[i] < rhs[j]) {
+                return false;
+            }
+            else {
+                ++i;
+                ++j;
+            }
+        }
+        return false;
+    }
+};
+string largestNumber(vector<int> &nums) {
+    // write your code here
+    string res;
+    if (nums.empty()) {
+        return res;
+    }
+    int count = 0;
+    int n = nums.size();
+    vector<string> strs(n);
+    for (int i = 0; i < n; ++i) {
+        strs[i] = to_string(nums[i]);
+        if (nums[i] == 0) {
+            ++count;
+        }
+    }
+    if (count == n) {
+        return "0";
+    }
+    sort(strs.begin(), strs.end(), comp());
+    for (auto str: strs) {
+        res += str;
+    }
+
+    return res;
+}
