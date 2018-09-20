@@ -1,0 +1,54 @@
+描述
+给出一个字符串 A, 表示一个 n 位正整数, 删除其中 k 位数字, 使得剩余的数字仍然按照原来的顺序排列产生一个新的正整数。
+
+找到删除 k 个数字之后的最小正整数。
+
+N <= 240, k <= N
+样例
+给出一个字符串代表的正整数 A 和一个整数 k, 其中 A = 178542, k = 4
+
+返回一个字符串 "12"
+
+Answer:
+string DeleteDigits(string &A, int k) {
+    // write your code here
+    int n = A.size();
+    if (n == k) {
+        return "0";
+    }
+    string res;
+    int size = n - k;
+    int i = 0;
+    while (k > 0 && i < n) {
+        if(res.empty()) {
+            res.push_back(A[i]);
+            ++i;
+        }
+        else {
+            if (res.back() <= A[i]) {
+                res.push_back(A[i]);
+                ++i;
+            }
+            else {
+                res.pop_back();
+                --k;
+            }
+        }
+    }
+    while (i < n) {
+    res.push_back(A[i++]);
+  }
+    while (res.size() > size) {
+        res.pop_back();
+    }
+    for(auto it = res.begin(); it != res.end();) {
+        if(*it != '0'){
+            break;
+        } 
+        it = res.erase(it);
+    }
+    if (res.empty()) {
+        return "0";
+    }
+    return res;
+}
